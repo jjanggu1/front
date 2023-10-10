@@ -1,0 +1,138 @@
+.createPost_popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.createPost {
+    width: 58%;
+    height: 65%;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+}
+
+/*  */
+.createPost_header,
+.createPost_uploadImg {
+    padding: 1%;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.createPost_uploadImg {
+    padding: 1.5%;
+}
+
+.createPost_header button {
+    border: none;
+    background: none;
+    color: #099AFA;
+    font-weight: bold;
+}
+
+/*  */
+.createPost_displayImg {
+    width: 100%;
+    height: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.createPost_displayImg_imgArea {
+    width: 97%;
+    height: 85%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 4px;
+    background-color: #ccc;
+}
+.createPost_displayImg_uploadBtn {
+    border: 1px solid black;
+    padding: 20px 22px;
+    border-radius: 50%;
+}
+.createPost_displayImg_uploadText {
+    font-size: small;
+}
+/*  */
+.createPost_detail {
+    padding: 1%;
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.createPost_detail input {
+    width: 95%;
+    padding: 1% 0;
+    border: none;
+    outline: none;
+}
+/*  */
+.createPost_addMap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1% 1.5%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+/*  */
+.createPost_commentToggle {
+    padding: 1% 1%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 아이폰 스타일 토글 버튼 스타일 */
+.iphone-toggle {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+    background-color: #ccc;
+    border-radius: 20px;
+    cursor: pointer;
+    margin: 10px;
+  }
+  
+  .iphone-toggle-checkbox {
+    display: none;
+  }
+  
+  .iphone-toggle-slider {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 22px;
+    height: 22px;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: all 0.3s;
+  }
+  
+  /* 스위치 켜짐 상태의 스타일 */
+  .iphone-toggle-checkbox:checked + .iphone-toggle-slider {
+    transform: translateX(24px);
+  }
+  
+  /* 토글 버튼 라벨 클릭 시 포인터 이벤트 무시 */
+  .iphone-toggle-checkbox:focus + .iphone-toggle-slider {
+    pointer-events: none;
+  }
+  .iphone-toggle.on {
+    transition: all 0.3s;
+    background-color: black; /* 스위치가 켜진 상태일 때의 배경색을 원하는 색상으로 변경 */
+  }

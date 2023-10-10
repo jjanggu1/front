@@ -1,0 +1,147 @@
+.userUpdate_wrap {
+    width: 100%;
+}
+
+.userUpdate {
+    width: 50%;
+    margin: 2% auto;
+    border: 1px solid #B5B5B5;
+    border-radius: 2px;
+    display: flex;
+}
+
+/* 프로필수정 사이드바 */
+.userUpdate_sideBar {
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #B5B5B5;
+}
+
+.userUpdate_sideBar span {
+    padding: 5% 10%;
+}
+.userUpdate_sideBar span:first-child {
+    border-left: 1px solid black;
+    font-weight: bold;
+}
+
+/* 프로필수정 메인 */
+.userUpdate_main {
+    width: 80%;
+    height: 100%;
+    padding: 2% 0;
+}
+/* 프로필이미지 변경 */
+.userUpdate_main_imgUpdate {
+    width: 100%;
+    height: 6em;
+    display: flex;
+    align-items: center;
+}
+.userUpdate_main_imgUpdate_img {
+    width: 25%;
+    height: 100%;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    margin-right: 3%;
+}
+.userUpdate_main_imgUpdate img{
+    width: 47%;
+    height: 90%;
+    border-radius: 50%;
+}
+.userUpdate_main_imgUpdate_btn {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    margin-left: 1%;
+}
+.userUpdate_main_imgUpdate_btn span:first-child {
+    font-weight: bold;
+    font-size: large;
+}
+.userUpdate_main_imgUpdate_btn span:last-child {
+    width: 30%;
+    font-size: small;
+    font-weight: bold;
+    border: none;
+    background: none;
+    padding: 1% 0;
+    color: #099AFA;
+}
+/* 사용자 정보 변경 */
+/* -라벨 */
+.userUpdate_main_infoUpdate {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    margin-top: 2%;
+}
+.userUpdate_main_infoUpdate_label {
+    width: 30%;
+    height: 100%;
+    text-align: right;
+    font-weight: bold;
+    margin-right: 3%;
+    padding: 1%;
+    display: flex;
+    flex-direction: column;
+}
+.userUpdate_main_infoUpdate_label label:nth-child(1) {
+    margin-bottom: 61%;
+}
+.userUpdate_main_infoUpdate_label label:nth-child(2) {
+    margin-bottom: 120%;
+}
+.userUpdate_main_infoUpdate_label label:nth-child(n+3) {
+    margin-bottom: 16%;
+}
+/* -작성 */
+.userUpdate_main_infoUpdate_input {
+    display: flex;
+    flex-direction: column;
+}
+.userUpdate_main_infoUpdate_input input,
+.userUpdate_main_infoUpdate_input textarea {
+    width: 60%;
+    padding: 1.5% 2%;
+    border-radius: 4px;
+    border: 1px solid #DDDDDD;
+    outline: #DDDDDD;
+    font-weight: bold;
+}
+.userUpdate_main_infoUpdate_input textarea {
+    height: 6.25em;
+    font-weight:normal;
+    font-size: large;
+    resize: none;
+}
+.userUpdate_main_infoUpdate_input input:nth-child(n+7) {
+    margin-bottom: 3%;
+}
+.userUpdate_main_infoUpdate_input input:last-child {
+    border: none;
+    width: 10%;
+    background-color: #099AFA;
+    color: white;
+    font-weight: bold;
+    font-size: smaller;
+}
+.userUpdate_main_infoUpdate_input p {
+    width: 64%;
+    font-size: small;
+    font-weight: bold;
+    color: #B5B5B5;
+}
+.userUpdate_main_infoUpdate_input p:nth-child(-n+4) {
+ margin-bottom: 6%;
+}
+.userUpdate_main_infoUpdate_input p:nth-child(5) {
+    font-size: small;
+}
+/* 소개란 스타일 */
+#intro {
+    margin-bottom: 3%;
+}
