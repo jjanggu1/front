@@ -18,3 +18,8 @@ app.listen(port, () => {
 
 app.use('/api/movie', require('./routes/movieRouter'));
 app.use('/api/mypage', require('./routes/mypageRouter'));
+app.use('/api/login', require('./routes/loginRouter'));
+app.use('/api/createPost', require('./routes/createPostRouter'));
+app.use('/api/main', require('./routes/mainRouter'));
+app.use('/api/updateProfile', require('./routes/updateProfileRouter'));
+app.use('/api/join', require('./routes/joinRouter'));

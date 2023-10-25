@@ -9,7 +9,6 @@ router.route('/')
 router.route('/getPostsData')
     .post(mypageCtrl.getUserPosts)
 
-
 // 마이페이지 - 저장됨 데이터
 router.route('/getSavedData')
     .post(mypageCtrl.getSavedData)

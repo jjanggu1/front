@@ -1,19 +1,21 @@
 import './Header.css';
-
 import CreatePost from '../CreatePost/CreatePost';
-import { useState } from 'react';
+import { useSelector, useDispatch } from "react-redux";
+import { toggleCreatePost } from "../../store/store";
 
 function Header() {
-    const [isCreatePostVisible, setCreatePostVisible] = useState(false);
+    let isCreatePostVisible = useSelector(state => state.createPostVisible)
+    let dispatch = useDispatch();
+    // const [isCreatePostVisible, setCreatePostVisible] = useState(false);
 
-    const toggleCreatePost = () => {
-        setCreatePostVisible(!isCreatePostVisible);
-    }
+    // const toggleCreatePost = () => {
+    //     setCreatePostVisible(!isCreatePostVisible);
+    // }
     return (
         <div className="header">
             <div className="header_content">
                 <div className="logo">
-                    <span>memories</span>
+                    <span><a href="/">memories</a></span>
                 </div>
 
                 <div className="search">
@@ -24,7 +26,7 @@ function Header() {
                     <a href="/">
                         <i class="fa-solid fa-house-chimney fa-xl"></i>
                     </a>
-                    <i class="fa-regular fa-square-plus fa-2x" onClick={toggleCreatePost}></i>
+                    <i class="fa-regular fa-square-plus fa-2x" onClick={ () => { dispatch(toggleCreatePost()) }}></i>
                     <a href="/mypage">
                         <i class="fa-regular fa-circle-user fa-2x"></i>
                     </a>

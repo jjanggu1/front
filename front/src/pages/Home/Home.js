@@ -3,7 +3,7 @@ import Content from '../Content/Content.js';
 
 function Home() {
     return (
-        <div>
+        <div className='Home'>
             <Header />
             <Content />
         </div>

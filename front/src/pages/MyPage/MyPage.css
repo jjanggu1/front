@@ -53,6 +53,7 @@
 }
 .myPage_header_user_community span {
     margin-right: 3%;
+    cursor: pointer;
 }
 .myPage_header_user_name span {
     font-weight: bold;
@@ -70,22 +71,9 @@
 .myPage_category span {
     margin: 0 2%;
     padding: 1.5% 0;
-
+    cursor: pointer;
 }
 .myPage_category span:first-child {
     border-top: 1px solid black;
     font-weight: bold;
-}
-/* 게시물 */
-.myPage_posts {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-}
-.myPage_posts img {
-    width: 32%;
-    margin-bottom: 2%;
-}
-.myPage_posts img:nth-child(3n-1) {
-    margin: 0 2% 2% 2%;
 }

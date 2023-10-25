@@ -17,14 +17,3 @@ const connectToDatabase = async () => {
   }
   
   module.exports = connectToDatabase;
-// const pool = mysql.createPool({
-//     host:conf.host,
-//     user:conf.user,
-//     password:conf.password,
-//     port:conf.port,
-//     database:conf.database
-// });
-
-
-
-// module.exports = connection;

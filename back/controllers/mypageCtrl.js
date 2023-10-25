@@ -1,5 +1,4 @@
 const connectToDatabase = require("../dbConfig");
-const test = require("./")
 
 const myPageCtrl = {
     // 회원 데이터 조회

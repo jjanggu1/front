@@ -44,7 +44,7 @@ function UserUpdate() {
 
                             <input type="text" id='phonenum' placeholder='전화번호' />
 
-                            <textarea type="text" id='intro' placeholder='소개' maxLength={150}/>
+                            <textarea type="text" id='intro' placeholder='소개' maxLength={100}/>
 
                             <input type="submit" value={"제출"} />
                         </div>

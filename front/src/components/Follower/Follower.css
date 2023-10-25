@@ -1,0 +1,88 @@
+.follower_popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.follower {
+    width: 25%;
+    height: 55%;
+    background-color: #fff;
+    border-radius: 14px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+}
+
+/*  */
+.follower_header {
+    padding: 3%;
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.follower_header span {
+    width: 100%;
+    text-align: center;
+    margin-left: 5%;
+    font-weight: bold;
+}
+.follower_header button {
+    border: none;
+    background: none;
+    font-weight: bold;
+    font-size: large;
+    cursor: pointer;
+}
+/*  */
+.follower_search {
+    margin: 3% 0;
+    text-align: center;
+}
+.follower_search input {
+    background-color: #f6f6f6;
+    border: none;
+    border-radius: 8px;
+    width: 9cm;
+    padding: 2% 2%;
+    outline: none;
+}
+
+/*  */
+.follower_followers {
+    height: 70%;
+    overflow: auto;
+}
+.follower_follower {
+    width: 92%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2% 4%;
+    margin: 0 0;
+}
+.follower_follower img {
+    width: 2.75em;
+    height: 2.75em;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.follower_follower span {
+    margin-right: 52%;
+    font-weight: bold;
+    font-size: small;
+    cursor: pointer;
+}
+.follower_follower button {
+    font-weight: bold;
+    padding: 2% 5%;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}

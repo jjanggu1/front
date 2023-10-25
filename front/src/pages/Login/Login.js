@@ -8,7 +8,7 @@ function Login() {
                     <span>memories</span>
                 </div>
                 <div className='login_main_input'>
-                    <input type="text" placeholder='이메일' />
+                    <input type="text" placeholder='아이디' />
                     <input type="password" placeholder='비밀번호' />
                 </div>
                 <div className='login_main_submit'>
@@ -29,7 +29,7 @@ function Login() {
                 </div>
             </div>
             <div className='login_sub'>
-                <a href="/" className='login_sub_join'>
+                <a href="/join" className='login_sub_join'>
                     <span>계정이 없으신가요?</span>
                     <span>가입하기</span>
                 </a>

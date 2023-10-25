@@ -1,8 +1,14 @@
 import './CreatePost.css';
 
 import { useState } from 'react';
+import { useSelector, useDispatch } from "react-redux";
+import { toggleCreatePost } from "../../store/store";
 
 function CreatePost() {
+    let isCreatePostVisible = useSelector(state => state.createPostVisible)
+    let dispatch = useDispatch();
+
+    // 댓글기능 상태
     const [isChecked, setIsChecked] = useState(false);
 
     const handleToggle = () => {
@@ -12,7 +18,7 @@ function CreatePost() {
         <div className="createPost_popup">
             <div className="createPost">
                 <div className="createPost_header">
-                    <button>취소</button>
+                    <button onClick={ () => { dispatch(toggleCreatePost()) }}>취소</button>
                     <button>공유</button>
                 </div>
                 <div className="createPost_uploadImg">
@@ -30,10 +36,6 @@ function CreatePost() {
                 <div className="createPost_detail">
                     <span><strong>문구 입력</strong></span>
                     <input type="text" placeholder="문구를 입력하세요." />
-                </div>
-                <div className="createPost_addMap">
-                    <span><strong>위치 추가</strong></span>
-                    <i class="fa-solid fa-location-dot fa-lg"></i>
                 </div>
                 <div className="createPost_commentToggle">
                     <span><strong>댓글 기능 해제</strong></span>

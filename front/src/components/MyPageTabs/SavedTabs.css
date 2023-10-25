@@ -1,0 +1,13 @@
+/* 게시물 */
+.myPage_saved {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+.myPage_saved img {
+    width: 32%;
+    margin-bottom: 2%;
+}
+.myPage_saved img:nth-child(3n-1) {
+    margin: 0 2% 2% 2%;
+}
