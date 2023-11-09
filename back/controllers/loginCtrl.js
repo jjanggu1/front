@@ -11,46 +11,40 @@ const loginCtrl = {
             const connection = await connectToDatabase(); //DB연결
 
             // DB에서 가져온 데이터
-            const results = await connection.execute('SELECT * FROM user WHERE USER_ID = ?', [userId]);
-            const hashedPassword = results[0][0].USER_PW;
-            console.log(results[0][0]);
+            const [rows, fields] = await connection.execute('SELECT * FROM user WHERE USER_ID = ?', [userId]);
 
-            const idMatch = results.length === 0 ? false : true;
+            if (rows.length === 0) {
+                console.log("아이디가 존재하지 않습니다.");
+                return res.status(401).send("존재하지 않는 사용자입니다.")
+            }
+
+            const hashedPassword = rows[0].USER_PW;
             const passwordMatch = await bcrypt.compare(password, hashedPassword);
 
-            let userData = {
-                userId: results[0][0].USER_ID,
-                userEmail: results[0][0].USER_EMAIL,
-                userName: results[0][0].USER_NAME,
-                userNickname: results[0][0].USER_NICKNAME,
-                userPhone: results[0][0].USER_PHONE,
-                userIntro: results[0][0].USER_INTRO,
-                userImage: results[0][0].USER_IMAGE,
-            }; //로그인 성공시 프론드단에 보낼 데이터
-
-            if(idMatch) { //아이디 존재하면
-                if (!passwordMatch) { //아이디 존재, 비밀번호 불일치면
-                    console.log("비밀번호 불일치");
-                    res.send({
-                        success: false,
-                        message: "비밀번호 불일치"
-                    });
-                } else if (idMatch && passwordMatch) { //아이디존재, 비번 일치하면
-                    console.log("로그인 성공");
-                    res.send({
-                        success: true,
-                        message: "로그인 성공",
-                        userData
-                    });
-                }
+            if (!passwordMatch) {
+                console.log("비밀번호가 일치하지 않습니다.");
+                return res.status(401).json({
+                    success: false,
+                    message: "존재하지 않는 사용자입니다."
+                });
             }
-            connection.end(); // DB연결 종료
+            let userData = { //로그인 성공시 프론드단에 보낼 데이터
+                userId: rows[0].USER_ID,
+                userEmail: rows[0].USER_EMAIL,
+                userName: rows[0].USER_NAME,
+                userNickname: rows[0].USER_NICKNAME,
+                userPhone: rows[0].USER_PHONE,
+                userIntro: rows[0].USER_INTRO,
+                userImage: rows[0].USER_IMAGE,
+            }; 
+            console.log("로그인 성공");
+            return res.status(200).json({userData});
         } catch (error) {
-            console.error('로그인 오류 : ' + error.message);
-            res.send({
+            console.error('로그인 오류: ' + error.message);
+            return res.status(500).json({
                 success: false,
-                message: "존재하지 않는 아이디"
-            })
+                message: "로그인 오류"
+            });
         }
     },
 

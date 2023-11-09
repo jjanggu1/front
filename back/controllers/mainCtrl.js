@@ -15,7 +15,7 @@ const mainCtrl = {
             ORDER BY board.BRD_CREATED_AT DESC
             `);
             res.send(rows);
-
+            console.log(rows);
             connection.end(); // 연결 종료
         } catch (error) {
             console.error("게시물 목록 조회 실패", error);

@@ -11,7 +11,7 @@ function Follower() {
             <div className="follower">
                 <div className="follower_header">
                     <span>팔로워</span>
-                    <button onClick={ () => { dispatch(toggleFollower()) }}><i class="fa-solid fa-x"></i></button>
+                    <button onClick={ () => { dispatch(toggleFollower()) }}><i className="fa-solid fa-x"></i></button>
                 </div>
                 <div className="follower_search">
                     <input type="text" placeholder="검색" />

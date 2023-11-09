@@ -53,6 +53,9 @@
 }
 .myPage_header_user_community span {
     margin-right: 3%;
+}
+.myPage_header_user_community span:nth-child(2),
+.myPage_header_user_community span:nth-child(3) {
     cursor: pointer;
 }
 .myPage_header_user_name span {
@@ -68,12 +71,12 @@
     justify-content: center;
     align-items: center;
 }
-.myPage_category span {
+.myPage_category_span {
     margin: 0 2%;
     padding: 1.5% 0;
     cursor: pointer;
 }
-.myPage_category span:first-child {
+.myPage_category_span_border {
     border-top: 1px solid black;
     font-weight: bold;
 }

@@ -36,7 +36,7 @@ function MyPage() {
                         <div className='myPage_header_user_info'>
                             <span>dong9ri_</span>
                             <a href="/userupdate">프로필 편집</a>
-                            <i class="fa-solid fa-gear"></i>
+                            <i className="fa-solid fa-gear"></i>
                         </div>
                         <div className='myPage_header_user_community'>
                             <span>게시물 <strong>11</strong></span>
@@ -52,16 +52,19 @@ function MyPage() {
                     </div>
                 </div>
                 <div className='myPage_category'>
-                    <span onClick={() => { dispatch(chooseTabs("post")) }}>
-                        <i class="fa-solid fa-border-all"></i>
+                    <span onClick={() => { dispatch(chooseTabs("post")) }}
+                        className={`myPage_category_span ${contentsVisible === "post" ? "myPage_category_span_border" : ""}`}>
+                        <i className="fa-solid fa-border-all"></i>
                         게시물
                     </span>
-                    <span onClick={() => { dispatch(chooseTabs("saved")) }}>
-                        <i class="fa-regular fa-bookmark"></i>
+                    <span onClick={() => { dispatch(chooseTabs("saved")) }}
+                        className={`myPage_category_span ${contentsVisible === "saved" ? "myPage_category_span_border" : ""}`}>
+                        <i className="fa-regular fa-bookmark"></i>
                         저장됨
                     </span>
-                    <span onClick={() => { dispatch(chooseTabs("liked")) }}>
-                        <i class="fa-regular fa-heart"></i>
+                    <span onClick={() => { dispatch(chooseTabs("liked")) }}
+                        className={`myPage_category_span ${contentsVisible === "liked" ? "myPage_category_span_border" : ""}`}>
+                        <i className="fa-regular fa-heart"></i>
                         좋아요
                     </span>
                 </div>

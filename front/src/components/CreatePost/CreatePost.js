@@ -22,13 +22,14 @@ function CreatePost() {
                     <button>공유</button>
                 </div>
                 <div className="createPost_uploadImg">
+                    <input type="file" />
                     <span><strong>이미지 업로드</strong></span>
-                    <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                    <i className="fa-solid fa-arrow-up-from-bracket"></i>
                 </div>
                 <div className="createPost_displayImg">
                     <div className='createPost_displayImg_imgArea'>
                         <div className='createPost_displayImg_uploadBtn'>
-                            <i class="fa-solid fa-arrow-up-from-bracket fa-lg"></i>
+                            <i className="fa-solid fa-arrow-up-from-bracket fa-lg"></i>
                         </div>
                         <p className='createPost_displayImg_uploadText'>업로드된 사진이 여기에 표시됩니다.</p>
                     </div>

@@ -11,7 +11,7 @@ function Following() {
             <div className="following">
                 <div className="following_header">
                     <span>팔로윙</span>
-                    <button onClick={ () => { dispatch(toggleFollowing()) }}><i class="fa-solid fa-x"></i></button>
+                    <button onClick={ () => { dispatch(toggleFollowing()) }}><i className="fa-solid fa-x"></i></button>
                 </div>
                 <div className="following_search">
                     <input type="text" placeholder="검색" />

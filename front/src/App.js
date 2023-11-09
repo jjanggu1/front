@@ -12,9 +12,12 @@ import Follower from './components/Follower/Follower.js';
 // import LikedTabs from './components/MyPageTabs/LikedTabs.js';
 
 
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 
 function App() {
+  let isLoggedIn = false;
+  localStorage.getItem("userId") === null ? isLoggedIn = false : isLoggedIn = true;
+
   return (
     <div className="App">
         <Routes>
@@ -22,8 +25,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/join" element={<Join />} />
-          <Route path="/mypage" element={<MyPage />} />
-          <Route path="/userupdate" element={<UserUpdate />} />
+          <Route path="/mypage" element={isLoggedIn ? <MyPage /> : <Navigate to="/login" />} />
+          <Route path="/userupdate" element={isLoggedIn ? <UserUpdate /> : <Navigate to="/login" />} />
           {/* components */}
           <Route path="/follower" element={<Follower />} />
           {/* <Route path="/follower" element={<PostTabs />} />
