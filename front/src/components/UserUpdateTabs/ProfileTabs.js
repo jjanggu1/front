@@ -6,6 +6,7 @@ function ProfileTabs() {
     const BASE_URL = "http://localhost:4000";
 
     const [userId, setUserId] = useState(null);
+    // 로컬스토리지에서 userId값 받아옴
     const getLocalStorageId = () => {
         const storedUserId = localStorage.getItem("userId");
         if (storedUserId) {
@@ -13,34 +14,36 @@ function ProfileTabs() {
             console.log("userId 상태 저장 성공")
         }
     }
+    // 서버로부터 프로필 이미지 받아옴
     const getProfileImage = async () => {
         try {
             const userIdValue = localStorage.getItem("userId");
             console.log(userIdValue);
-    
+
             const userId = {
                 userId: userIdValue
             };
-    
+
             const res = await axios.post(`${BASE_URL}/api/profileImg/getProfileImage`, userId, { responseType: 'arraybuffer' });
-            
+
             // Convert array buffer to base64
             const base64Image = btoa(new Uint8Array(res.data).reduce((data, byte) => data + String.fromCharCode(byte), ''));
-    
+
             const imageUrl = `data:image/png;base64,${base64Image}`;
             setPreviewImage(imageUrl);
-    
+
         } catch (error) {
             console.error('이미지 불러오기 오류: ', error);
         }
     };
-    
+
+    // 페이지 로딩시 
     useEffect(() => {
-        getLocalStorageId();
-        getProfileImage();
+        getLocalStorageId(); // 로컬스토리지 userId를 가져옴
+        getProfileImage(); // 프로필이미지를 서버에서 받아옴
     }, []);
 
-
+    // 이미지 미리보기 로직
     const [selectedFile, setSelectedFile] = useState(null);
     const [previewImage, setPreviewImage] = useState(null);
 
@@ -60,28 +63,65 @@ function ProfileTabs() {
         }
     };
 
+    // 제출버튼 클릭시 실행할 함수들
     const handleUploadButtonClick = () => {
-        // 서버로 이미지 업로드
-        handleUploadImage();
+        fetchUpdateUserInfo();
+        fetchUploadImage(); // 서버로 이미지 업로드
     };
 
-    const handleUploadImage = async () => {
+    // 유저정보 수정 로직
+    const [userInfoInput, setUserInfoInput] = useState({
+        name: "",
+        username: "",
+        email: "",
+        phonenum: "",
+        intro: "",
+        userId: userId
+    })
+
+    const { name, username, email, phonenum, intro } = userInfoInput;
+
+    const onChangeUserInfoInput = (e) => {
+        const { value, name } = e.target
+        setUserInfoInput({
+            ...userInfoInput,
+            [name]: value,
+        });
+        console.log(userInfoInput)
+    }
+    // 유저정보 수정을 서버로 요청
+    const fetchUpdateUserInfo = async () => {
         try {
-            const formData = new FormData();
-            formData.append('profileImage', selectedFile);
-            formData.append('userId', userId);
-            console.log(formData);
-            // 서버로 이미지 업로드
-            const res = await axios.post(`${BASE_URL}/api/updateProfileImg`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
+            const storedUserId = localStorage.getItem("userId");
+            setUserInfoInput({
+                userId : storedUserId
+            })
+            const res = await axios.post(`${BASE_URL}/api/updateProfile`, userInfoInput);
+            alert(res.data.message);
+        } catch (error) {
+            console.error('유저정보 수정에 실패하였습니다. : ', error);
+        }
+    }
 
-            const data = res.data;
-            console.log(data);
+    // 프로필 이미지 업로드 서버로 요청
+    const fetchUploadImage = async () => {
+        try {
+            if (selectedFile) {
+                const formData = new FormData();
+                formData.append('profileImage', selectedFile);
+                formData.append('userId', userId);
+                console.log(formData);
+                // 서버로 이미지 업로드
+                const res = await axios.post(`${BASE_URL}/api/profileImg`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
 
-            // 여기에서 서버로부터 받은 이미지 경로를 사용하면 됩니다.
+                const data = res.data;
+                console.log(data);
+
+            }
 
         } catch (error) {
             console.error('이미지 업로드 오류: ', error);
@@ -121,22 +161,22 @@ function ProfileTabs() {
                     <label htmlFor="intro">소개</label>
                 </div>
                 <div className='userUpdate_main_infoUpdate_input'>
-                    <input type="text" id='name' placeholder='이름' />
+                    <input onChange={onChangeUserInfoInput} name="name" value={name} type="text" id='name' placeholder='이름' />
                     <p>사람들이 이름, 별명 또는 비즈니스 이름 등 회원님의 알려진 이름을 사용
                         하여 회원님의 계정을 찾을 수 있도록 도와주세요.</p>
 
-                    <input type="text" id='username' placeholder='사용자 이름' />
+                    <input onChange={onChangeUserInfoInput} name="username" value={username} type="text" id='username' placeholder='사용자 이름' />
                     <p>대부분의 경우 14일 이내에 사용자 이름을 다시 <span>dong9ri</span>(으)로 변
                         경할 수 있습니다.</p>
 
                     <p>개인정보</p>
                     <p>비즈니스나 반려동물 등에 사용된 계정인 경우에도 회원님의 개인 정보를
                         입력하세요. 공개 프로필에는 포함되지 않습니다.</p>
-                    <input type="text" id='email' placeholder='이메일' />
+                    <input onChange={onChangeUserInfoInput} name="email" value={email} type="text" id='email' placeholder='이메일' />
 
-                    <input type="text" id='phonenum' placeholder='전화번호' />
+                    <input onChange={onChangeUserInfoInput} name="phonenum" value={phonenum} type="text" id='phonenum' placeholder='전화번호' />
 
-                    <textarea type="text" id='intro' placeholder='소개' maxLength={100} />
+                    <textarea onChange={onChangeUserInfoInput} name="intro" value={intro} type="text" id='intro' placeholder='소개' maxLength={100} />
 
                     <button type="button" onClick={handleUploadButtonClick}>
                         제출

@@ -48,3 +48,18 @@ a {
     cursor: pointer;
     color: black;
 }
+.header_content .service img{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2em;
+    height: 2em;
+    border-radius: 50%;
+    padding: 0 0.5em;
+}
+
+
+.loginBtn {
+    color: #099AFA;
+    font-weight: bold;
+}

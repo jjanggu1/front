@@ -13,17 +13,24 @@ import Follower from './components/Follower/Follower.js';
 
 
 import { Route, Routes, Navigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 function App() {
-  let isLoggedIn = false;
-  localStorage.getItem("userId") === null ? isLoggedIn = false : isLoggedIn = true;
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    return localStorage.getItem("userId") !== null;
+  });
+
+  useEffect(() => {
+    // 로그인 여부를 확인하고 상태를 업데이트
+    setIsLoggedIn(localStorage.getItem("userId") !== null);
+  }, []); // 두 번째 매개변수로 빈 배열을 전달하여 컴포넌트가 처음 마운트될 때만 실행
 
   return (
     <div className="App">
         <Routes>
           {/* pages */}
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={isLoggedIn ? <Navigate to="/" />: <Login />} />
           <Route path="/join" element={<Join />} />
           <Route path="/mypage" element={isLoggedIn ? <MyPage /> : <Navigate to="/login" />} />
           <Route path="/userupdate" element={isLoggedIn ? <UserUpdate /> : <Navigate to="/login" />} />

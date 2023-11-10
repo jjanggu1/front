@@ -5,15 +5,15 @@ const updateProfileCtrl = {
     // 회원 프로필 수정
     updateUserData: async (req, res) => {
         try {
-            const { userName, userNick, userEmail, userPhone, userIntro, userImg, userId } = req.body;
+            const { name, username, email, phonenum, intro, userId } = req.body;
 
             const connection = await connectToDatabase();
 
             const [results] = await connection.query(`
             UPDATE user
-            SET USER_NAME = ?, USER_NICKNAME = ?, USER_EMAIL = ?, USER_PHONE = ?, USER_INTRO = ?, USER_IMAGE = ?
+            SET USER_NAME = ?, USER_NICKNAME = ?, USER_EMAIL = ?, USER_PHONE = ?, USER_INTRO = ?
             WHERE USER_ID = ?;
-            `, [ userName, userNick, userEmail, userPhone, userIntro, userImg, userId]);
+            `, [ name, username, email, phonenum, intro, userId]);
 
             console.log('프로필이 성공적으로 수정되었습니다.', results);
             res.json({ success: true, message: '프로필이 수정되었습니다.' });
