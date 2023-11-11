@@ -1,5 +1,6 @@
-import { useRef, useState, useEffect } from 'react';
 import './ProfileTabs.css';
+
+import { useRef, useState, useEffect } from 'react';
 import axios from 'axios';
 
 function ProfileTabs() {
@@ -13,6 +14,10 @@ function ProfileTabs() {
             setUserId(storedUserId);
             console.log("userId 상태 저장 성공")
         }
+        setUserInfoInput(prevState => ({
+            ...prevState,
+            userId: storedUserId
+        }));
     }
     // 서버로부터 프로필 이미지 받아옴
     const getProfileImage = async () => {
@@ -64,9 +69,9 @@ function ProfileTabs() {
     };
 
     // 제출버튼 클릭시 실행할 함수들
-    const handleUploadButtonClick = () => {
-        fetchUpdateUserInfo();
-        fetchUploadImage(); // 서버로 이미지 업로드
+    const handleUploadButtonClick = async () => {
+        await fetchUpdateUserInfo(); // 서버로 유저정보 업로드
+        await fetchUploadImage(); // 서버로 이미지 업로드
     };
 
     // 유저정보 수정 로직
@@ -89,13 +94,10 @@ function ProfileTabs() {
         });
         console.log(userInfoInput)
     }
+
     // 유저정보 수정을 서버로 요청
     const fetchUpdateUserInfo = async () => {
         try {
-            const storedUserId = localStorage.getItem("userId");
-            setUserInfoInput({
-                userId : storedUserId
-            })
             const res = await axios.post(`${BASE_URL}/api/updateProfile`, userInfoInput);
             alert(res.data.message);
         } catch (error) {
@@ -161,20 +163,20 @@ function ProfileTabs() {
                     <label htmlFor="intro">소개</label>
                 </div>
                 <div className='userUpdate_main_infoUpdate_input'>
-                    <input onChange={onChangeUserInfoInput} name="name" value={name} type="text" id='name' placeholder='이름' />
+                    <input onChange={onChangeUserInfoInput} name="name" value={name} type="text" id='name' placeholder='이름' maxLength={24}/>
                     <p>사람들이 이름, 별명 또는 비즈니스 이름 등 회원님의 알려진 이름을 사용
                         하여 회원님의 계정을 찾을 수 있도록 도와주세요.</p>
 
-                    <input onChange={onChangeUserInfoInput} name="username" value={username} type="text" id='username' placeholder='사용자 이름' />
+                    <input onChange={onChangeUserInfoInput} name="username" value={username} type="text" id='username' placeholder='사용자 이름' maxLength={24}/>
                     <p>대부분의 경우 14일 이내에 사용자 이름을 다시 <span>dong9ri</span>(으)로 변
                         경할 수 있습니다.</p>
 
                     <p>개인정보</p>
                     <p>비즈니스나 반려동물 등에 사용된 계정인 경우에도 회원님의 개인 정보를
                         입력하세요. 공개 프로필에는 포함되지 않습니다.</p>
-                    <input onChange={onChangeUserInfoInput} name="email" value={email} type="text" id='email' placeholder='이메일' />
+                    <input onChange={onChangeUserInfoInput} name="email" value={email} type="text" id='email' placeholder='이메일' maxLength={30}/>
 
-                    <input onChange={onChangeUserInfoInput} name="phonenum" value={phonenum} type="text" id='phonenum' placeholder='전화번호' />
+                    <input onChange={onChangeUserInfoInput} name="phonenum" value={phonenum} type="text" id='phonenum' placeholder='전화번호' maxLength={13}/>
 
                     <textarea onChange={onChangeUserInfoInput} name="intro" value={intro} type="text" id='intro' placeholder='소개' maxLength={100} />
 

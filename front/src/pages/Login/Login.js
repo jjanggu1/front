@@ -67,6 +67,7 @@ function Login() {
                         placeholder='비밀번호'
                         onChange={(e) => handleChange(e)}
                         onKeyDown={handleEnterKeyPress}
+                        maxLength={150}
                     />
                 </form>
                 <div className='login_main_submit'>
