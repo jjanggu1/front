@@ -24,4 +24,4 @@ yarn-debug.log*
 yarn-error.log*
 
 # user uploads
-/uploads
+back/uploads/
