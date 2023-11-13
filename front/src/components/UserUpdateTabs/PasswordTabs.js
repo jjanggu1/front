@@ -6,6 +6,9 @@ import axios from 'axios';
 function PasswordTabs() {
     const BASE_URL = "http://localhost:4000";
 
+    //로그인된 아이디 저장
+    const [userId, setUserId] = useState(localStorage.getItem("userId"));
+
     //비밀번호, 비밀번호확인 값 상태저장 로직
     const [passwordInput, setPasswordInput] = useState({
         password: "",
@@ -47,6 +50,12 @@ function PasswordTabs() {
 
     }
 
+    // 서버로 보낼 회원 데이터 객체
+    const userData = {
+        userId: userId,
+        userPassword: passwordInput.password
+    }
+
     // 비밀번호 수정을 서버로 요청
     const fetchUpdatePassword = async () => {
         try {
@@ -54,17 +63,16 @@ function PasswordTabs() {
             if (!isMatchedPassword) {
                 alert("비밀번호를 다시 확인해주세요.");
             } else {
-                alert("변경완료");
-                // const res = await axios.post(`${BASE_URL}/api/updateProfile/password`, passwordInput);
-                // alert(res.data.message);
+                const res = await axios.post(`${BASE_URL}/api/updateProfile/password`, userData);
+                alert(res.data.message);
             }
         } catch (error) {
             console.error('유저정보 수정에 실패하였습니다. : ', error);
         }
     }
 
+    // 변경버튼 클릭시 실행할 함수
     const handleChangeBtnClick = () => {
-        console.log(passwordInput); // 추가
         fetchUpdatePassword();
     }
 

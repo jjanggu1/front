@@ -22,10 +22,16 @@
 
 /* 글 헤더 */
 .post_header_img {
-    width: 7%;
+    width: 5%;
+}
+.post_header_img img {
+    width: 100%;
+    border-radius: 50%;
 }
 .post_header_userName {
     width: 90%;
+    font-weight: bold;
+    margin-left: 0.5em;
 }
 .post_header_more {
     width: 3%;
@@ -47,7 +53,7 @@
 
 /* 글 정보 */
 .post_content_info {
-    padding: 2%;
+    padding: 1% 2%;
 }
 .post_content_info_btns {
     display: flex;

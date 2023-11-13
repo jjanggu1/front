@@ -17,8 +17,8 @@ function Header() {
         localStorage.getItem("userId") === null ? setIsLoggedIn(false) : setIsLoggedIn(true);
     }
     useEffect(() => {
-        loggedInCheck();
-        getProfileImage();
+        loggedInCheck(); //로그인여부 확인
+        getProfileImage(); //프로필 이미지 불러옴
     }, []);
 
     const logout = () => { //로그아웃
@@ -34,6 +34,7 @@ function Header() {
 
     const [previewImage, setPreviewImage] = useState(null);
 
+    // 프로필 이미지 불러오기
     const getProfileImage = async () => {
         try {
             const userIdValue = localStorage.getItem("userId");

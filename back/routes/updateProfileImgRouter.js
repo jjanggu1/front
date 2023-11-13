@@ -40,7 +40,8 @@ router.post('/getProfileImage', async (req, res) => {
         const connection = await connectToDatabase();
         const selectQuery = `SELECT USER_IMAGE FROM user WHERE USER_ID = ?`;
         const result = await connection.query(selectQuery, [userId]);
-        
+        console.log("쿼리 결과값 : ", result);
+        console.log("게시글 이미지 요청 아이디 : ", userId);
         if (result.length > 0 && result[0][0].USER_IMAGE) {
             const imagePathFromDB = result[0][0].USER_IMAGE;
             const imagePath = path.join(__dirname, '..', 'uploads', 'profile', imagePathFromDB);

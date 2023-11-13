@@ -7,7 +7,7 @@ const mainCtrl = {
             const connection = await connectToDatabase();
             
             const [rows] = await connection.query(`
-            SELECT board.*, user.USER_NICKNAME, user.USER_IMAGE, COUNT(likedpost.LIKED_NUM) AS LIKED_COUNT
+            SELECT board.*, user.USER_ID, user.USER_NICKNAME, user.USER_IMAGE, COUNT(likedpost.LIKED_NUM) AS LIKED_COUNT
             FROM board
             INNER JOIN user ON board.BRD_WRITER = user.USER_ID
             LEFT JOIN likedpost ON board.BRD_ID = likedpost.LIKED_NUM

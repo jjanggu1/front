@@ -27,8 +27,9 @@ const updateProfileCtrl = {
     // 회원 비밀번호 수정
     updatePassword: async (req, res) => {
         try {
-            let userPassword = req.body.userPassword;
             const userId = req.body.userId;
+            let userPassword = req.body.userPassword;
+
             const bcryptPassword = await bcrypt.hash(userPassword, 12);
 
             const connection = await connectToDatabase();

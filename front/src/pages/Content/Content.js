@@ -1,14 +1,21 @@
 import './Content.css';
 
-import PostMore from '../../components/PostMore/PostMore.js';
+import PostImg1 from '../../assets/img/main_img1.png';
+import PostImg2 from '../../assets/img/main_img2.jpg';
+import PostImg3 from '../../assets/img/main_img3.jpg';
 
+import PostMore from '../../components/PostMore/PostMore.js';
+import ImageSlider from '../../components/ImageSlider/ImageSlider.js';
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+
 // 리덕스툴킷 수정함수 임포트
 import { tooglePostMore } from "../../store/store";
 
 function Content() {
+    const BASE_URL = "http://localhost:4000";
+
     let mainPostMoreVisible = useSelector(state => state.mainPostMoreVisible)
     let dispatch = useDispatch();
 
@@ -16,22 +23,54 @@ function Content() {
     const [postsData, setPostsData] = useState();
 
 
-    // 서버에 게시글 데이터 요청
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchDataAndImages = async () => {
             try {
-                const res = await axios.get('http://localhost:4000/api/main');
+                const res = await axios.get(`${BASE_URL}/api/main`);
                 const data = res.data;
-                setPostsData(data);
 
+                // 프로필 이미지를 받아오는 함수
+                const getProfileImage = async (userId) => {
+                    try {
+                        const res = await axios.post(`${BASE_URL}/api/profileImg/getProfileImage`, { userId }, { responseType: 'arraybuffer' });
+                        const base64Image = btoa(new Uint8Array(res.data).reduce((data, byte) => data + String.fromCharCode(byte), ''));
+                        const imageUrl = `data:image/png;base64,${base64Image}`;
+                        return imageUrl;
+                    } catch (error) {
+                        console.error('이미지 불러오기 오류: ', error);
+                        return null;
+                    }
+                };
+
+                // 프로필 이미지를 받아오는 Promise 배열
+                const imagePromises = data.map(async (item) => {
+                    if (item.USER_ID) {
+                        const imageUrl = await getProfileImage(item.USER_ID);
+                        return { ...item, USER_IMAGE: imageUrl };
+                    }
+                    return item;
+                });
+
+                // Promise 배열을 해결하고 state 업데이트
+                const updatedPostsData = await Promise.all(imagePromises);
+                setPostsData(updatedPostsData);
             } catch (error) {
                 console.error('에러발생 : ', error);
             }
-        }
+        };
 
-        fetchData();
+        fetchDataAndImages();
     }, []);
-    console.log(postsData);
+
+
+    const [previewImage, setPreviewImage] = useState(null);
+
+    const images = [
+        PostImg1,
+        PostImg2,
+        PostImg3
+    ]; // 이미지 URL 배열
+
     return (
         <div className="content">
             <div className="posts">
@@ -42,7 +81,11 @@ function Content() {
                                 key={item.BRD_ID} >
                                 <div className="post_header">
                                     <div className="post_header_img">
-                                        <i className="fa-regular fa-circle-user fa-2x"></i>
+                                        {item.USER_IMAGE ? (
+                                            <img src={item.USER_IMAGE} alt="프로필 이미지" />
+                                        ) : (
+                                            <i className="fa-regular fa-circle-user fa-2x"></i>
+                                        )}
                                     </div>
                                     <div className="post_header_userName">
                                         <span>{item.USER_NICKNAME}</span>
@@ -54,7 +97,7 @@ function Content() {
                                 </div>
                                 <div className="post_content">
                                     <div className="post_content_img">
-                                        <img src={require("../../assets/img/main_img1.png")} alt="이미지1" />
+                                    <ImageSlider images={images} />
                                     </div>
                                     <div className="post_content_info">
                                         <div className="post_content_info_btns">

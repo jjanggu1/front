@@ -1,0 +1,23 @@
+.custom-arrow {
+    position: absolute;
+    z-index: 9999;
+    color: gray;
+    background-color: whitesmoke;
+    display: flex;
+    padding: 1% 1.5%;
+    border-radius: 50%;
+    font-size: small;
+    cursor: pointer;
+}
+.custom-arrow:hover {
+    color: black;
+}
+
+.prev {
+    margin-top: 38%;
+    margin-left: 2%;
+}
+.next {
+    margin-top: -43%;
+    margin-left: 94%;
+}

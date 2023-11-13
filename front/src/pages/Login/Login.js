@@ -37,7 +37,7 @@ function Login() {
 
         } catch (error) {
             if (error.response.status === 401) {
-                alert("존재하지 않는 사용자입니다.");
+                alert("로그인에 실패하였습니다.");
             } else {
                 console.error('에러발생 : ', error);
             }

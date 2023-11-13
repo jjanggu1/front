@@ -25,7 +25,7 @@ const loginCtrl = {
                 console.log("비밀번호가 일치하지 않습니다.");
                 return res.status(401).json({
                     success: false,
-                    message: "존재하지 않는 사용자입니다."
+                    message: "비밀번호가 일치하지 않습니다."
                 });
             }
             let userData = { //로그인 성공시 프론드단에 보낼 데이터
