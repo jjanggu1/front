@@ -65,12 +65,10 @@ function Content() {
 
     const [previewImage, setPreviewImage] = useState(null);
 
-    const images = [
-        PostImg1,
-        PostImg2,
-        PostImg3
-    ]; // 이미지 URL 배열
-
+    //이미지 경로 동적생성
+    const generateImagePaths = (brdId, ...imageNames) => {
+        return imageNames.map(imageName => `http://localhost:4000/postImg/${brdId}/${imageName}`);
+    }
     return (
         <div className="content">
             <div className="posts">
@@ -97,7 +95,7 @@ function Content() {
                                 </div>
                                 <div className="post_content">
                                     <div className="post_content_img">
-                                    <ImageSlider images={images} />
+                                        <ImageSlider images={generateImagePaths(item.BRD_ID, item.BRD_IMAGE1, item.BRD_IMAGE2, item.BRD_IMAGE3, item.BRD_IMAGE4, item.BRD_IMAGE5)} />
                                     </div>
                                     <div className="post_content_info">
                                         <div className="post_content_info_btns">

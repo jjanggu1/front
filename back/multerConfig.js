@@ -9,7 +9,7 @@ const storage = multer.diskStorage({
     if (file.fieldname === "profileImage") {
       uploadPath = "uploads/profile"; // 프로필 이미지 저장 경로
     } else if (file.fieldname === "postImage") {
-      uploadPath = "uploads/post"; // 카페 이미지 저장 경로
+      uploadPath = "uploads/post"; // 게시글 이미지 저장 경로
     } else {
       uploadPath = "uploads/default"; // 기본 이미지 저장 경로
     }

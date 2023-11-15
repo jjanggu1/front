@@ -1,11 +1,12 @@
 const connectToDatabase = require("../dbConfig");
+const path = require('path');
 
 const mainCtrl = {
     //메인페이지 게시글 목록(최신순) 데이터
     getMainPostData: async (req, res) => {
         try {
             const connection = await connectToDatabase();
-            
+
             const [rows] = await connection.query(`
             SELECT board.*, user.USER_ID, user.USER_NICKNAME, user.USER_IMAGE, COUNT(likedpost.LIKED_NUM) AS LIKED_COUNT
             FROM board
@@ -101,7 +102,9 @@ const mainCtrl = {
             console.error('예외 발생:', error);
             res.status(500).json({ success: false, message: '서버 오류' });
         }
-    }
+    },
 }
+
+
 
 module.exports = mainCtrl;

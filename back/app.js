@@ -12,6 +12,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 
+app.use('/postImg', express.static('uploads/post'));
 
 app.use('/api/movie', require('./routes/movieRouter'));
 app.use('/api/mypage', require('./routes/mypageRouter'));
