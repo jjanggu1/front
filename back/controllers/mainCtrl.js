@@ -8,7 +8,7 @@ const mainCtrl = {
             const connection = await connectToDatabase();
 
             const [rows] = await connection.query(`
-            SELECT board.*, user.USER_ID, user.USER_NICKNAME, user.USER_IMAGE, COUNT(likedpost.LIKED_NUM) AS LIKED_COUNT
+            SELECT board.BRD_ID, board.BRD_WRITER, board.BRD_NICK, board.BRD_IMAGE1, board.BRD_IMAGE2, board.BRD_IMAGE3, board.BRD_IMAGE4, board.BRD_IMAGE5, board.BRD_CON, board.BRD_HASHTAG, board.BRD_COMMENT_OPEN, board.BRD_REPORT, DATE_FORMAT(board.BRD_CREATED_AT, '%Y.%m.%d %r') AS BRD_CREATED_AT, user.USER_ID, user.USER_NICKNAME, user.USER_IMAGE, COUNT(likedpost.LIKED_NUM) AS LIKED_COUNT
             FROM board
             INNER JOIN user ON board.BRD_WRITER = user.USER_ID
             LEFT JOIN likedpost ON board.BRD_ID = likedpost.LIKED_NUM
@@ -30,10 +30,10 @@ const mainCtrl = {
             const connection = await connectToDatabase();
 
             const [rows] = await connection.query(`
-            SELECT comment.COM_NUM, comment.COM_WRITER, comment.COM_IMAGE, comment.COM_CREATED_AT, comment.COM_COMMENT, comment.COM_REPORT, user.USER_NICKNAME, user.USER_IMAGE
+            SELECT comment.COM_ID, comment.COM_NUM, comment.COM_WRITER, comment.COM_IMAGE, DATE_FORMAT(comment.COM_CREATED_AT, '%Y.%m.%d %r') AS COM_CREATED_AT, comment.COM_COMMENT, comment.COM_REPORT, user.USER_NICKNAME, user.USER_IMAGE
             FROM comment
             INNER JOIN user ON comment.COM_WRITER = user.USER_ID
-            WHERE comment.COM_NUM = 1
+            WHERE comment.COM_NUM = ?
             ORDER BY comment.COM_CREATED_AT DESC
             `, [brdId]);
             res.send(rows);

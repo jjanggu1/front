@@ -48,7 +48,8 @@
 }
 .post_content_img img {
     width: 100%;
-    height: 50%;
+    height: 100%;
+    object-fit: fill;
 }
 
 /* 글 정보 */

@@ -1,9 +1,5 @@
 import './Content.css';
 
-import PostImg1 from '../../assets/img/main_img1.png';
-import PostImg2 from '../../assets/img/main_img2.jpg';
-import PostImg3 from '../../assets/img/main_img3.jpg';
-
 import PostMore from '../../components/PostMore/PostMore.js';
 import ImageSlider from '../../components/ImageSlider/ImageSlider.js';
 import { useSelector, useDispatch } from "react-redux";
@@ -22,11 +18,12 @@ function Content() {
     // 게시글 목록 데이터 상태
     const [postsData, setPostsData] = useState();
 
-
     useEffect(() => {
+
+
         const fetchDataAndImages = async () => {
             try {
-                const res = await axios.get(`${BASE_URL}/api/main`);
+                const res = await axios.get(`${BASE_URL}/api/main`); //게시글 목록 요청
                 const data = res.data;
 
                 // 프로필 이미지를 받아오는 함수
@@ -62,13 +59,78 @@ function Content() {
         fetchDataAndImages();
     }, []);
 
+    // 댓글 목록 데이터 상태
+    const [commentsData, setCommentsData] = useState({});
 
-    const [previewImage, setPreviewImage] = useState(null);
+    useEffect(() => {
+        // 댓글 데이터를 가져오는 함수
+        const fetchCommentData = async (brdId) => {
+            try {
+                const brdIdToObject = {
+                    brdId: brdId
+                };
+                const res = await axios.post(`${BASE_URL}/api/main/comments`, brdIdToObject);
+                const data = res.data;
+
+                setCommentsData(prevCommentsData => ({
+                    ...prevCommentsData,
+                    [brdId]: data
+                }));
+
+                console.log("댓글 데이터 : ", data);
+            } catch (error) {
+                console.error("댓글 데이터 가져오기 실패", error);
+            }
+        };
+
+        // 포스트 데이터가 변경될 때마다 댓글 데이터를 가져옴
+        if (postsData) {
+            const brdIds = postsData.map(item => item.BRD_ID);
+            brdIds.forEach(brdId => fetchCommentData(brdId));
+        }
+    }, [postsData]);
+
+    console.log("댓글 객체 : ", commentsData);
 
     //이미지 경로 동적생성
     const generateImagePaths = (brdId, ...imageNames) => {
         return imageNames.map(imageName => `http://localhost:4000/postImg/${brdId}/${imageName}`);
     }
+
+
+    // 게시글 얼마 전에 작성됐는지 구하는 로직
+    const getTimeAgo = (post) => {
+        const today = new Date();
+        const createdDay = new Date(post.BRD_CREATED_AT);
+        let milliseconds = 0;
+        if (createdDay) {
+            milliseconds = today - createdDay;
+        } else {
+            console.log("postsData가 정의되지 않았거나 비어 있습니다.");
+        }
+
+        const seconds = Math.floor(milliseconds / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+        const months = Math.floor(days / 30);
+        const years = Math.floor(months / 12);
+
+        if (years > 0) {
+            return `${years}년 전`;
+        } else if (months > 0) {
+            return `${months}달 전`;
+        } else if (days > 0) {
+            return `${days}일 전`;
+        } else if (hours > 0) {
+            return `${hours}시간 전`;
+        } else if (minutes > 0) {
+            return `${minutes}분 전`;
+        } else {
+            return "방금 전";
+        }
+    }
+
     return (
         <div className="content">
             <div className="posts">
@@ -117,11 +179,17 @@ function Content() {
                                             <span>{item.BRD_CON}</span>
                                         </div>
                                         <div className="post_content_info_commentList">
-                                            <span><strong>dong9ri_</strong></span>
-                                            <span>꽃 너무 이쁘다👍</span>
+                                            {commentsData[item.BRD_ID] && commentsData[item.BRD_ID].map((comment) => (
+                                                comment.COM_REPORT === 0 && (
+                                                    <div key={comment.COM_ID}>
+                                                        <span><strong>{comment.USER_NICKNAME}</strong></span>
+                                                        <span>{comment.COM_COMMENT}</span>
+                                                    </div>
+                                                )
+                                            ))}
                                         </div>
                                         <div className="post_content_info_time">
-                                            <span>1분전</span>
+                                            <span>{getTimeAgo(item)}</span>
                                         </div>
                                     </div>
 
