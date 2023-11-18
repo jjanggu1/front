@@ -12,11 +12,16 @@ function Header() {
     let isCreatePostVisible = useSelector(state => state.createPostVisible)
     let dispatch = useDispatch();
 
+
+    const userIdValue = localStorage.getItem("userId");
     const [isLoggedIn, setIsLoggedIn] = useState();
-    const loggedInCheck = () => {
-        localStorage.getItem("userId") === null ? setIsLoggedIn(false) : setIsLoggedIn(true);
-    }
+
     useEffect(() => {
+
+        const loggedInCheck = () => {
+            localStorage.getItem("userId") === null ? setIsLoggedIn(false) : setIsLoggedIn(true);
+        }
+
         loggedInCheck(); //로그인여부 확인
         getProfileImage(); //프로필 이미지 불러옴
     }, []);
@@ -37,8 +42,6 @@ function Header() {
     // 프로필 이미지 불러오기
     const getProfileImage = async () => {
         try {
-            const userIdValue = localStorage.getItem("userId");
-            console.log(userIdValue);
 
             const userId = {
                 userId: userIdValue
@@ -79,7 +82,7 @@ function Header() {
                         ) : (
                             <i className="fa-regular fa-circle-user fa-2x"></i>
                         )}
-                        
+
                     </a>
                     {isLoggedIn === false ? <a href="/login" className="loginBtn">로그인</a> : (
                         <a href="#" onClick={logout}><i className="fa-solid fa-right-from-bracket fa-xl"></i></a>

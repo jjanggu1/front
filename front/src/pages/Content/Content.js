@@ -12,83 +12,74 @@ import { tooglePostMore } from "../../store/store";
 function Content() {
     const BASE_URL = "http://localhost:4000";
 
+    const [isLoggedIn, setIsLoggedIn] = useState(() => {
+        return localStorage.getItem("userId") !== null;
+    });
+
+
     let mainPostMoreVisible = useSelector(state => state.mainPostMoreVisible)
     let dispatch = useDispatch();
 
     // 게시글 목록 데이터 상태
     const [postsData, setPostsData] = useState();
 
-    useEffect(() => {
+    const fetchPostData = async () => {
+        try {
+            const res = await axios.get(`${BASE_URL}/api/main`); //게시글 목록 요청
+            const data = res.data;
+            await setPostsData(data);
 
-
-        const fetchDataAndImages = async () => {
-            try {
-                const res = await axios.get(`${BASE_URL}/api/main`); //게시글 목록 요청
-                const data = res.data;
-
-                // 프로필 이미지를 받아오는 함수
-                const getProfileImage = async (userId) => {
-                    try {
-                        const res = await axios.post(`${BASE_URL}/api/profileImg/getProfileImage`, { userId }, { responseType: 'arraybuffer' });
-                        const base64Image = btoa(new Uint8Array(res.data).reduce((data, byte) => data + String.fromCharCode(byte), ''));
-                        const imageUrl = `data:image/png;base64,${base64Image}`;
-                        return imageUrl;
-                    } catch (error) {
-                        console.error('이미지 불러오기 오류: ', error);
-                        return null;
-                    }
-                };
-
-                // 프로필 이미지를 받아오는 Promise 배열
-                const imagePromises = data.map(async (item) => {
-                    if (item.USER_ID) {
-                        const imageUrl = await getProfileImage(item.USER_ID);
-                        return { ...item, USER_IMAGE: imageUrl };
-                    }
-                    return item;
-                });
-
-                // Promise 배열을 해결하고 state 업데이트
-                const updatedPostsData = await Promise.all(imagePromises);
-                setPostsData(updatedPostsData);
-            } catch (error) {
-                console.error('에러발생 : ', error);
-            }
-        };
-
-        fetchDataAndImages();
-    }, []);
+            return data; // 데이터 반환
+        } catch (e) {
+            console.error(e);
+        }
+    }
 
     // 댓글 목록 데이터 상태
     const [commentsData, setCommentsData] = useState({});
 
-    useEffect(() => {
-        // 댓글 데이터를 가져오는 함수
-        const fetchCommentData = async (brdId) => {
-            try {
+    // 댓글 데이터를 가져오는 함수
+    const fetchCommentData = async () => {
+        try {
+            // 포스트 데이터를 가져와서 BRD_ID의 배열을 얻습니다.
+            const postData = await fetchPostData();
+
+            if (!postData) {
+                console.error("게시글 데이터가 아직 설정되지 않았습니다.");
+                return;
+            }
+
+            // 각 BRD_ID에 대해 댓글을 가져오기 위해 반복문을 사용합니다.
+            for (const brdId of postData.map((element) => element.BRD_ID)) {
                 const brdIdToObject = {
                     brdId: brdId
                 };
+
                 const res = await axios.post(`${BASE_URL}/api/main/comments`, brdIdToObject);
                 const data = res.data;
 
+                // commentsData 상태를 업데이트합니다.
                 setCommentsData(prevCommentsData => ({
                     ...prevCommentsData,
                     [brdId]: data
                 }));
 
-                console.log("댓글 데이터 : ", data);
-            } catch (error) {
-                console.error("댓글 데이터 가져오기 실패", error);
+                console.log(`댓글 데이터 (BRD_ID: ${brdId}):`, data);
             }
-        };
-
-        // 포스트 데이터가 변경될 때마다 댓글 데이터를 가져옴
-        if (postsData) {
-            const brdIds = postsData.map(item => item.BRD_ID);
-            brdIds.forEach(brdId => fetchCommentData(brdId));
+        } catch (error) {
+            console.error("댓글 데이터 가져오기 실패", error);
         }
-    }, [postsData]);
+    };
+
+    useEffect(() => {
+        // 로그인 여부를 확인하고 상태를 업데이트
+        setIsLoggedIn(localStorage.getItem("userId") !== null);
+
+        fetchPostData();
+        fetchCommentData();
+    }, []);
+
+
 
     console.log("댓글 객체 : ", commentsData);
 
@@ -131,6 +122,62 @@ function Content() {
         }
     }
 
+    //댓글 작성 로직
+
+    //회원아아디, 닉네임 가져오기 
+    const userId = localStorage.getItem('userId');
+    const userNick = localStorage.getItem('userNick');
+
+    // 서버로 요청할 댓글 데이터
+    const [commentInfo, setCommentInfo] = useState({
+        brdId: null,
+        userId: userId,
+        userNick: userNick,
+        comment: ''
+    });
+    // 댓글 input값 상태를 변경하는 함수
+    const inputCommentChange = (event) => {
+        setCommentInfo((prevComment) => ({
+            ...prevComment,
+            comment: event.target.value
+        }));
+    };
+
+    const getBrdId = (brdId) => {
+        const newBrdId = brdId;
+        setCommentInfo((prevCommentInfo) => ({
+            ...prevCommentInfo,
+            brdId: newBrdId,
+        }));
+    }
+
+
+    // 댓글 추가 통신 함수
+    const fetchAddComment = async () => {
+        try {
+            if (commentInfo.comment === "") {
+                alert("댓글을 입력하세요.")
+            } else {
+                console.log("commentInfo : ", commentInfo)
+                const res = await axios.post(`${BASE_URL}/api/main/insertComment`, commentInfo);
+                const data = res.data;
+                console.log(data);
+
+                // 댓글입력 초기화
+                setCommentInfo((prevComment) => ({
+                    ...prevComment,
+                    comment: ""
+                }));
+
+                fetchCommentData();
+            }
+        } catch (error) {
+            console.error("댓글 추가 실패", error);
+        }
+
+
+    }
+
     return (
         <div className="content">
             <div className="posts">
@@ -142,7 +189,7 @@ function Content() {
                                 <div className="post_header">
                                     <div className="post_header_img">
                                         {item.USER_IMAGE ? (
-                                            <img src={item.USER_IMAGE} alt="프로필 이미지" />
+                                            <img src={`http://localhost:4000/profileImg/${item.USER_IMAGE}`} alt="프로필 이미지" />
                                         ) : (
                                             <i className="fa-regular fa-circle-user fa-2x"></i>
                                         )}
@@ -195,11 +242,20 @@ function Content() {
 
                                 </div>
                                 <div className="post_comment">
-                                    <i className="fa-regular fa-circle-user fa-2x"></i>
+                                    {isLoggedIn ? (<img src={`http://localhost:4000/profileImg/${item.USER_IMAGE}`} alt="프로필 이미지" />) : (<i className="fa-regular fa-circle-user fa-2x"></i>)}
                                     <div className="post_comment_detail">
-                                        <input type="text" placeholder="댓글 달기..." />
+                                        <input value={commentInfo.comment} onChange={(event) => {
+                                            inputCommentChange(event);
+                                            getBrdId(item.BRD_ID);
+                                        }
+
+                                        } type="text" placeholder="댓글 달기..." />
                                     </div>
-                                    <button>게시</button>
+                                    <button onClick={() => {
+                                        fetchAddComment();
+                                        // getbrdId(item.BRD_ID);
+                                        // sendCommentRequest();
+                                    }}>게시</button>
                                 </div>
                             </div>
                         )

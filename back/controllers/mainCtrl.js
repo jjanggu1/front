@@ -86,16 +86,27 @@ const mainCtrl = {
     //COM_NUM, COM_WRITER, COM_NICK, COM_COMMENT
     insertMainComment: async (req, res) => {
         try {
-            const { COM_NUM, COM_WRITER, COM_NICK, COM_COMMENT } = req.body;
+            const { brdId, userId, userNick, comment } = req.body;
 
             const connection = await connectToDatabase();
 
             const [results] = await connection.query(`
             INSERT INTO comment (COM_NUM, COM_WRITER, COM_NICK, COM_COMMENT) VALUES (?, ?, ?, ?)
-            `, [COM_NUM, COM_WRITER, COM_NICK, COM_COMMENT]);
+            `, [brdId, userId, userNick, comment]);
 
-            console.log('댓글이 성공적으로 추가되었습니다.');
-            res.json({ success: true, message: '댓글이 추가되었습니다.' });
+            console.log('댓글이 성공적으로 추가되었습니다.', results);
+            
+            // 추가된 댓글을 반환하여 응답
+            const [rows] = await connection.query(`
+            SELECT comment.COM_ID, comment.COM_NUM, comment.COM_WRITER, comment.COM_IMAGE, DATE_FORMAT(comment.COM_CREATED_AT, '%Y.%m.%d %r') AS COM_CREATED_AT, comment.COM_COMMENT, comment.COM_REPORT, user.USER_NICKNAME, user.USER_IMAGE
+            FROM comment
+            INNER JOIN user ON comment.COM_WRITER = user.USER_ID
+            WHERE comment.COM_NUM = ?
+            ORDER BY comment.COM_CREATED_AT DESC
+            LIMIT 1
+            `, [brdId]);
+            // res.json({ success: true, message: '댓글이 추가되었습니다.' });
+            res.send(rows);
 
             connection.end(); // 연결 종료
         } catch (error) {
