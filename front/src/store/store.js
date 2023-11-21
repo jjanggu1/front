@@ -79,6 +79,17 @@ let mainPostMoreVisible = createSlice({
         }
     }
 })
+
+// 댓글 더보기 팝업
+let mainCommentMoreVisible = createSlice({
+    name: 'mainCommentMoreVisible',
+    initialState: false,
+    reducers : {
+        toogleCommentMore(state) {
+            return !state;
+        }
+    }
+})
 // 메인 페이지 끝-----------------------------------
 
 
@@ -92,6 +103,7 @@ export let { chooseTabs } = contentsVisible.actions
 export let { chooseUpdateUserTabs } = updateUserTabsVisible.actions
 
 export let { tooglePostMore } = mainPostMoreVisible.actions
+export let { toogleCommentMore } = mainCommentMoreVisible.actions
 
 
 export default configureStore({
@@ -103,5 +115,6 @@ export default configureStore({
         contentsVisible: contentsVisible.reducer,
         updateUserTabsVisible: updateUserTabsVisible.reducer,
         mainPostMoreVisible: mainPostMoreVisible.reducer,
+        mainCommentMoreVisible: mainCommentMoreVisible.reducer,
     },
 });

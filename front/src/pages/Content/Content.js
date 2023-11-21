@@ -1,6 +1,7 @@
 import './Content.css';
 
 import PostMore from '../../components/PostMore/PostMore.js';
+import CommentMore from '../../components/CommentMore/CommentMore.js';
 import ImageSlider from '../../components/ImageSlider/ImageSlider.js';
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from 'react';
@@ -8,6 +9,7 @@ import axios from 'axios';
 
 // 리덕스툴킷 수정함수 임포트
 import { tooglePostMore } from "../../store/store";
+import { toogleCommentMore } from "../../store/store";
 
 function Content() {
     const BASE_URL = "http://localhost:4000";
@@ -17,7 +19,8 @@ function Content() {
     });
 
 
-    let mainPostMoreVisible = useSelector(state => state.mainPostMoreVisible)
+    let mainPostMoreVisible = useSelector(state => state.mainPostMoreVisible);
+    let mainCommentMoreVisible = useSelector(state => state.mainCommentMoreVisible)
     let dispatch = useDispatch();
 
     // 게시글 목록 데이터 상태
@@ -75,7 +78,7 @@ function Content() {
     useEffect(() => {
         // 로그인 여부를 확인하고 상태를 업데이트
         setIsLoggedIn(localStorage.getItem("userId") !== null);
-
+        
         fetchLikedSaved();
         fetchPostData();
         fetchCommentData();
@@ -150,7 +153,7 @@ function Content() {
         }));
     }
 
- 
+
     // 댓글 추가 요청 함수
     const fetchAddComment = async () => {
         try {
@@ -200,16 +203,18 @@ function Content() {
     console.log("좋아요, 저장한 글 데이터 요청 : ", userLikedSaved);
 
     // 좋아요 토글 함수
-    const handleToggleLike = (brdId) => {
+    const handleToggleLike = async (brdId) => {
         // 좋아요를 눌렀는지 확인
         const isLiked = userLikedSaved.some(element => element.LIKED_NUM === brdId);
         console.log("좋아요 여부 : ", isLiked);
 
         if (!isLiked) {
-            fetchAddLike(brdId);
+            await fetchAddLike(brdId);
         } else {
-            fetchRemoveLike(brdId);
+            await fetchRemoveLike(brdId);
         }
+
+        fetchLikedSaved();
     }
 
     // 회원의 좋아요 추가 요청
@@ -226,7 +231,7 @@ function Content() {
                 const data = res.data.success;
 
                 console.log("좋아요 요청 : ", data)
-                fetchLikedSaved();
+                
             }
         } catch (error) {
             console.error(error);
@@ -247,7 +252,7 @@ function Content() {
                 const data = res.data.success;
 
                 console.log("좋아요 요청 : ", data)
-                fetchLikedSaved();
+                
             }
         } catch (error) {
             console.error(error);
@@ -255,16 +260,17 @@ function Content() {
     }
 
     // 저장글 토글 함수
-    const handleToggleSave = (brdId) => {
+    const handleToggleSave = async (brdId) => {
         // 글을 저장했는지 확인
         const isSaved = userLikedSaved.some(element => element.SAVED_NUM === brdId);
         console.log("글 저장 여부 : ", isSaved);
 
         if (!isSaved) {
-            fetchAddSave(brdId);
+            await fetchAddSave(brdId);
         } else {
-            fetchRemoveSave(brdId);
+            await fetchRemoveSave(brdId);
         }
+        fetchLikedSaved();
     }
 
     // 회원의 저장글 추가 요청
@@ -281,7 +287,7 @@ function Content() {
                 const data = res.data.success;
 
                 console.log("글 저장 요청 : ", data)
-                fetchLikedSaved();
+                
             }
         } catch (error) {
             console.error(error);
@@ -303,7 +309,7 @@ function Content() {
 
                 console.log("글 저장 요청 : ", data);
 
-                fetchLikedSaved();
+                
             }
         } catch (error) {
             console.error(error);
@@ -382,9 +388,15 @@ function Content() {
                                         <div className="post_content_info_commentList">
                                             {commentsData[item.BRD_ID] && commentsData[item.BRD_ID].map((comment) => (
                                                 comment.COM_REPORT === 0 && (
-                                                    <div key={comment.COM_ID}>
+                                                    <div className='post_content_info_comment' key={comment.COM_ID}>
                                                         <span><strong>{comment.USER_NICKNAME}</strong></span>
                                                         <span>{comment.COM_COMMENT}</span>
+                                                        <span  onClick={() => { dispatch(toogleCommentMore()) }}>
+                                                            <i
+                                                                className="fa-solid fa-ellipsis"
+                                                               
+                                                            ></i>
+                                                        </span>
                                                     </div>
                                                 )
                                             ))}
@@ -418,6 +430,7 @@ function Content() {
 
             </div>
             {mainPostMoreVisible && <PostMore />}
+            {mainCommentMoreVisible && <CommentMore />}
         </div >
     )
 

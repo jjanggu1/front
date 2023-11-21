@@ -72,6 +72,7 @@
     margin-right: 85%;
 }
 
+/* 댓글 */
 .post_content_info_firstComment span {
     font-size: small;
 }
@@ -83,9 +84,20 @@
 .post_content_info_detail ,
 .post_content_info_commentList  {
     padding-bottom: 2%;
+    margin-bottom: 2%;
 }
 .post_content_info_time {
     font-size: small;
+}
+
+.post_content_info_comment {
+    display: flex;
+    width: 100%;
+}
+.post_content_info_comment span:last-child {
+    margin-left: auto;
+    cursor: pointer;
+    color: #B5B5B5;
 }
 
 /* 댓글 달기 */

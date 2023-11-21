@@ -43,6 +43,51 @@ const mainCtrl = {
             console.error("해당글의 댓글 조회 실패", error);
         }
     },
+
+    // 해당 글의 댓글 추가
+    insertMainComment: async (req, res) => {
+        try {
+            const { brdId, userId, userNick, comment } = req.body;
+
+            const connection = await connectToDatabase();
+
+            const [results] = await connection.query(`
+            INSERT INTO comment (COM_NUM, COM_WRITER, COM_NICK, COM_COMMENT) VALUES (?, ?, ?, ?)
+            `, [brdId, userId, userNick, comment]);
+
+            console.log('댓글이 성공적으로 추가되었습니다.', results);
+
+            res.json({ success: true, message: '댓글이 추가되었습니다.' });
+
+            connection.end(); // 연결 종료
+        } catch (error) {
+            console.error('예외 발생:', error);
+            res.status(500).json({ success: false, message: '서버 오류' });
+        }
+    },
+
+    // 해당 글의 댓글 삭제
+    removeMainComment: async (req, res) => {
+        try {
+            const { comId, userId } = req.body;
+
+            const connection = await connectToDatabase();
+
+            const [results] = await connection.query(`
+            DELETE FROM comment WHERE COM_ID = ? AND COM_WRITER = ?
+            `, [comId, userId]);
+
+            console.log('댓글이 성공적으로 삭제되었습니다.', results);
+
+            res.json({ success: true, message: '댓글이 삭제되었습니다.' });
+
+            connection.end(); // 연결 종료
+        } catch (error) {
+            console.error('예외 발생:', error);
+            res.status(500).json({ success: false, message: '서버 오류' });
+        }
+    },
+
     // 로그인되어 있는 현재회원의 이미지
     getMainUserImg: async (req, res) => {
         try {
@@ -72,10 +117,16 @@ const mainCtrl = {
             const [rows] = await connection.query(`
             SELECT likedpost.*, savedpost.*
             FROM likedpost
-            JOIN savedpost ON likedpost.LIKED_ID = savedpost.SAVED_ID
-            WHERE likedpost.LIKED_ID = ?;
-            `, [userId]);
+            LEFT JOIN savedpost ON likedpost.LIKED_ID = savedpost.SAVED_ID
+            WHERE likedpost.LIKED_ID = ?
+            UNION
+            SELECT likedpost.*, savedpost.*
+            FROM likedpost
+            RIGHT JOIN savedpost ON likedpost.LIKED_ID = savedpost.SAVED_ID
+            WHERE savedpost.SAVED_ID = ?
+            `, [userId, userId]);
             res.send(rows);
+            console.log("좋아요저장됨 요청값 : ", rows)
 
             connection.end(); // 연결 종료
         } catch (error) {
@@ -161,38 +212,7 @@ const mainCtrl = {
         }
     },
 
-    // 해당 글의 댓글 추가
-    //COM_NUM, COM_WRITER, COM_NICK, COM_COMMENT
-    insertMainComment: async (req, res) => {
-        try {
-            const { brdId, userId, userNick, comment } = req.body;
 
-            const connection = await connectToDatabase();
-
-            const [results] = await connection.query(`
-            INSERT INTO comment (COM_NUM, COM_WRITER, COM_NICK, COM_COMMENT) VALUES (?, ?, ?, ?)
-            `, [brdId, userId, userNick, comment]);
-
-            console.log('댓글이 성공적으로 추가되었습니다.', results);
-
-            // 추가된 댓글을 반환하여 응답
-            const [rows] = await connection.query(`
-            SELECT comment.COM_ID, comment.COM_NUM, comment.COM_WRITER, comment.COM_IMAGE, DATE_FORMAT(comment.COM_CREATED_AT, '%Y.%m.%d %r') AS COM_CREATED_AT, comment.COM_COMMENT, comment.COM_REPORT, user.USER_NICKNAME, user.USER_IMAGE
-            FROM comment
-            INNER JOIN user ON comment.COM_WRITER = user.USER_ID
-            WHERE comment.COM_NUM = ?
-            ORDER BY comment.COM_CREATED_AT DESC
-            LIMIT 1
-            `, [brdId]);
-            // res.json({ success: true, message: '댓글이 추가되었습니다.' });
-            res.send(rows);
-
-            connection.end(); // 연결 종료
-        } catch (error) {
-            console.error('예외 발생:', error);
-            res.status(500).json({ success: false, message: '서버 오류' });
-        }
-    },
 }
 
 

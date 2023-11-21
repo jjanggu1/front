@@ -1,11 +1,11 @@
 import './PostMore.css';
 
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 // 리덕스툴킷 수정함수 임포트
 import { tooglePostMore } from "../../store/store";
 
 function PostMore() {
-    let mainPostMoreVisible = useSelector(state => state.mainPostMoreVisible)
+   
     let dispatch = useDispatch();
     return (
         <div className="postMore_popup">
