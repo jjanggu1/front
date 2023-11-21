@@ -1,6 +1,10 @@
+.imageslider {
+    width: 100%;
+    height: 100%;
+}
 .custom-arrow {
     position: absolute;
-    z-index: 9999;
+    z-index: 1;
     color: gray;
     background-color: whitesmoke;
     display: flex;
@@ -21,3 +25,15 @@
     margin-top: -50%;
     margin-left: 94%;
 }
+
+.slick-dots {
+    width: 50%;
+    margin-left: 25%;
+}
+.slick-dots .slick-active button::before {
+    color: #c1c1c1;
+  }
+  
+.slick-dots button::before {
+    color: #e9e9e9;
+  }

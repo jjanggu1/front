@@ -82,7 +82,86 @@ const mainCtrl = {
             console.error("회원의 좋아요,저장한 글 조회 실패", error);
         }
     },
-    // 해당 글의 댓글 작성
+
+    // 로그인되어 있는 회원의 좋아요 추가
+    addLike: async (req, res) => {
+        try {
+            const userId = req.body.userId;
+            const brdId = req.body.brdId;
+
+            const connection = await connectToDatabase();
+
+            const [rows] = await connection.query(`
+            INSERT INTO likedpost (LIKED_NUM, LIKED_ID) VALUES (?, ?)
+            `, [brdId, userId]);
+            res.json({ success: true, message: '좋아요 추가에 성공하였습니다.' });
+
+            connection.end(); // 연결 종료
+        } catch (error) {
+            console.error("좋아요 추가에 실패하였습니다.", error);
+        }
+    },
+
+    // 로그인되어 있는 회원의 좋아요 삭제
+    removeLike: async (req, res) => {
+        try {
+            const userId = req.body.userId;
+            const brdId = req.body.brdId;
+
+            const connection = await connectToDatabase();
+
+            const [rows] = await connection.query(`
+            DELETE FROM likedpost
+            WHERE LIKED_NUM = ? AND LIKED_ID = ?
+            `, [brdId, userId]);
+            res.json({ success: true, message: '좋아요 삭제에 성공하였습니다.' });
+
+            connection.end(); // 연결 종료
+        } catch (error) {
+            console.error("좋아요 삭제에 실패하였습니다.", error);
+        }
+    },
+
+    // 로그인되어 있는 회원의 저장글 추가
+    addSave: async (req, res) => {
+        try {
+            const userId = req.body.userId;
+            const brdId = req.body.brdId;
+
+            const connection = await connectToDatabase();
+
+            const [rows] = await connection.query(`
+            INSERT INTO savedpost (SAVED_NUM, SAVED_ID) VALUES (?, ?)
+            `, [brdId, userId]);
+            res.json({ success: true, message: '저장글 추가에 성공하였습니다.' });
+
+            connection.end(); // 연결 종료
+        } catch (error) {
+            console.error("저장글 추가에 실패하였습니다.", error);
+        }
+    },
+
+    // 로그인되어 있는 회원의 저장글 삭제
+    removeSave: async (req, res) => {
+        try {
+            const userId = req.body.userId;
+            const brdId = req.body.brdId;
+
+            const connection = await connectToDatabase();
+
+            const [rows] = await connection.query(`
+            DELETE FROM savedpost
+            WHERE SAVED_NUM = ? AND SAVED_ID = ?
+            `, [brdId, userId]);
+            res.json({ success: true, message: '저장글 삭제에 성공하였습니다.' });
+
+            connection.end(); // 연결 종료
+        } catch (error) {
+            console.error("저장글 삭제에 실패하였습니다.", error);
+        }
+    },
+
+    // 해당 글의 댓글 추가
     //COM_NUM, COM_WRITER, COM_NICK, COM_COMMENT
     insertMainComment: async (req, res) => {
         try {
@@ -95,7 +174,7 @@ const mainCtrl = {
             `, [brdId, userId, userNick, comment]);
 
             console.log('댓글이 성공적으로 추가되었습니다.', results);
-            
+
             // 추가된 댓글을 반환하여 응답
             const [rows] = await connection.query(`
             SELECT comment.COM_ID, comment.COM_NUM, comment.COM_WRITER, comment.COM_IMAGE, DATE_FORMAT(comment.COM_CREATED_AT, '%Y.%m.%d %r') AS COM_CREATED_AT, comment.COM_COMMENT, comment.COM_REPORT, user.USER_NICKNAME, user.USER_IMAGE

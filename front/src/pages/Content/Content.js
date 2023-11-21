@@ -23,6 +23,7 @@ function Content() {
     // 게시글 목록 데이터 상태
     const [postsData, setPostsData] = useState();
 
+    // 게시글 목록 요청 함수
     const fetchPostData = async () => {
         try {
             const res = await axios.get(`${BASE_URL}/api/main`); //게시글 목록 요청
@@ -38,7 +39,7 @@ function Content() {
     // 댓글 목록 데이터 상태
     const [commentsData, setCommentsData] = useState({});
 
-    // 댓글 데이터를 가져오는 함수
+    // 댓글 데이터를 요청 함수
     const fetchCommentData = async () => {
         try {
             // 포스트 데이터를 가져와서 BRD_ID의 배열을 얻습니다.
@@ -75,11 +76,10 @@ function Content() {
         // 로그인 여부를 확인하고 상태를 업데이트
         setIsLoggedIn(localStorage.getItem("userId") !== null);
 
+        fetchLikedSaved();
         fetchPostData();
         fetchCommentData();
     }, []);
-
-
 
     console.log("댓글 객체 : ", commentsData);
 
@@ -87,7 +87,6 @@ function Content() {
     const generateImagePaths = (brdId, ...imageNames) => {
         return imageNames.map(imageName => `http://localhost:4000/postImg/${brdId}/${imageName}`);
     }
-
 
     // 게시글 얼마 전에 작성됐는지 구하는 로직
     const getTimeAgo = (post) => {
@@ -123,7 +122,6 @@ function Content() {
     }
 
     //댓글 작성 로직
-
     //회원아아디, 닉네임 가져오기 
     const userId = localStorage.getItem('userId');
     const userNick = localStorage.getItem('userNick');
@@ -135,6 +133,7 @@ function Content() {
         userNick: userNick,
         comment: ''
     });
+
     // 댓글 input값 상태를 변경하는 함수
     const inputCommentChange = (event) => {
         setCommentInfo((prevComment) => ({
@@ -151,8 +150,8 @@ function Content() {
         }));
     }
 
-
-    // 댓글 추가 통신 함수
+ 
+    // 댓글 추가 요청 함수
     const fetchAddComment = async () => {
         try {
             if (commentInfo.comment === "") {
@@ -174,10 +173,142 @@ function Content() {
         } catch (error) {
             console.error("댓글 추가 실패", error);
         }
-
-
     }
 
+    //회원이 좋아요, 저장한 글 데이터
+    const [userLikedSaved, setUserLikedSaved] = useState();
+
+    // 회원이 좋아요, 저장한 글 데이터 요청
+    const fetchLikedSaved = async () => {
+        try {
+            const userIdData = {
+                userId: userId
+            }
+            if (userId === null) {
+                alert("로그인 해주세요.");
+            } else {
+                const res = await axios.post(`${BASE_URL}/api/main/likedSaved`, userIdData);
+                const data = res.data;
+
+                setUserLikedSaved(data);
+
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    console.log("좋아요, 저장한 글 데이터 요청 : ", userLikedSaved);
+
+    // 좋아요 토글 함수
+    const handleToggleLike = (brdId) => {
+        // 좋아요를 눌렀는지 확인
+        const isLiked = userLikedSaved.some(element => element.LIKED_NUM === brdId);
+        console.log("좋아요 여부 : ", isLiked);
+
+        if (!isLiked) {
+            fetchAddLike(brdId);
+        } else {
+            fetchRemoveLike(brdId);
+        }
+    }
+
+    // 회원의 좋아요 추가 요청
+    const fetchAddLike = async (brdId) => {
+        try {
+            const addLikeData = {
+                userId: userId,
+                brdId: brdId
+            }
+            if (userId === null) {
+                alert("로그인 해주세요.");
+            } else {
+                const res = await axios.post(`${BASE_URL}/api/main/addLike`, addLikeData);
+                const data = res.data.success;
+
+                console.log("좋아요 요청 : ", data)
+                fetchLikedSaved();
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    // 회원의 좋아요 삭제 요청
+    const fetchRemoveLike = async (brdId) => {
+        try {
+            const removeLikeData = {
+                userId: userId,
+                brdId: brdId
+            }
+            if (userId === null) {
+                alert("로그인 해주세요.");
+            } else {
+                const res = await axios.post(`${BASE_URL}/api/main/removeLike`, removeLikeData);
+                const data = res.data.success;
+
+                console.log("좋아요 요청 : ", data)
+                fetchLikedSaved();
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    // 저장글 토글 함수
+    const handleToggleSave = (brdId) => {
+        // 글을 저장했는지 확인
+        const isSaved = userLikedSaved.some(element => element.SAVED_NUM === brdId);
+        console.log("글 저장 여부 : ", isSaved);
+
+        if (!isSaved) {
+            fetchAddSave(brdId);
+        } else {
+            fetchRemoveSave(brdId);
+        }
+    }
+
+    // 회원의 저장글 추가 요청
+    const fetchAddSave = async (brdId) => {
+        try {
+            const addSaveData = {
+                userId: userId,
+                brdId: brdId
+            }
+            if (userId === null) {
+                alert("로그인 해주세요.");
+            } else {
+                const res = await axios.post(`${BASE_URL}/api/main/addSave`, addSaveData);
+                const data = res.data.success;
+
+                console.log("글 저장 요청 : ", data)
+                fetchLikedSaved();
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    // 회원의 저장글 삭제 요청
+    const fetchRemoveSave = async (brdId) => {
+        try {
+            const removeSaveData = {
+                userId: userId,
+                brdId: brdId
+            }
+            if (userId === null) {
+                alert("로그인 해주세요.");
+            } else {
+                const res = await axios.post(`${BASE_URL}/api/main/removeSave`, removeSaveData);
+                const data = res.data.success;
+
+                console.log("글 저장 요청 : ", data);
+
+                fetchLikedSaved();
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
     return (
         <div className="content">
             <div className="posts">
@@ -208,9 +339,32 @@ function Content() {
                                     </div>
                                     <div className="post_content_info">
                                         <div className="post_content_info_btns">
-                                            <i className="fa-regular fa-heart"></i>
+                                            {
+                                                userLikedSaved && userLikedSaved.length > 0 && userLikedSaved.some(element => element.LIKED_NUM === item.BRD_ID) ? (
+                                                    <i
+                                                        className="fa-solid fa-heart heart-style"
+                                                        onClick={() => handleToggleLike(item.BRD_ID)}
+                                                    ></i>
+                                                ) : (
+                                                    <i
+                                                        className="fa-regular fa-heart"
+                                                        onClick={() => handleToggleLike(item.BRD_ID)}
+                                                    ></i>
+                                                )
+                                            }
                                             <i className="fa-regular fa-comment"></i>
-                                            <i className="fa-regular fa-bookmark"></i>
+                                            {
+                                                userLikedSaved && userLikedSaved.length > 0 && userLikedSaved.some(element => element.SAVED_NUM === item.BRD_ID) ? (<i
+                                                    className="fa-solid fa-bookmark"
+                                                    onClick={() => handleToggleSave(item.BRD_ID)}
+                                                ></i>
+                                                ) : (
+                                                    <i
+                                                        className="fa-regular fa-bookmark"
+                                                        onClick={() => handleToggleSave(item.BRD_ID)}
+                                                    ></i>
+                                                )
+                                            }
                                         </div>
                                         <div className="post_content_info_firstComment">
                                             {item.LIKED_COUNT === 0 ? (

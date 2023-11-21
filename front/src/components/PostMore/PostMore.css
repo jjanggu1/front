@@ -33,3 +33,6 @@
 .postMore_btns button:nth-child(2) {
  color: red;
 }
+.postMore_btns button:nth-child(3) {
+    border: none;
+}

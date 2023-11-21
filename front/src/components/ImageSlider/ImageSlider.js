@@ -19,7 +19,6 @@ const ImageSlider = ({ images }) => {
     const { onClick } = props;
     return (
       <div className="custom-arrow prev" onClick={onClick}>
-        {/* You can customize the Prev Arrow UI here */}
         <i className="fa-solid fa-chevron-left"></i>
       </div>
     );
@@ -38,13 +37,15 @@ const ImageSlider = ({ images }) => {
   return (
     <div className="imageslider">
       {images.length > 0 && (
-        <Slider {...settings}>
-          {images.map((image, index) => (
-            <div key={index} className="carousel__item">
-              <img src={image} alt={`Image ${index + 1}`} />
-            </div>
-          ))}
-        </Slider>
+        <div className="custom-dot-container">
+          <Slider {...settings}>
+            {images.map((image, index) => (
+              <div key={index} className="carousel__item">
+                <img src={image} alt={`Image ${index + 1}`} />
+              </div>
+            ))}
+          </Slider>
+        </div>
       )}
     </div>
   );
