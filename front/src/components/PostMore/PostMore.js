@@ -14,7 +14,7 @@ function PostMore() {
     let dispatch = useDispatch();
     return (
         <div className="postMore_popup">
-            <div className="postMore_btns"></div>
+            <div className="postMore_btns">
                 <button>신고</button>
                 <button>팔로우 취소</button>
                 <button
