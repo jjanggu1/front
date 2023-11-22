@@ -3,8 +3,9 @@ import './Content.css';
 import PostMore from '../../components/PostMore/PostMore.js';
 import CommentMore from '../../components/CommentMore/CommentMore.js';
 import ImageSlider from '../../components/ImageSlider/ImageSlider.js';
+import { MyContext } from '../../context/context.js';
 import { useSelector, useDispatch } from "react-redux";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, createContext } from 'react';
 import axios from 'axios';
 
 // 리덕스툴킷 수정함수 임포트
@@ -13,6 +14,9 @@ import { toogleCommentMore } from "../../store/store";
 
 function Content() {
     const BASE_URL = "http://localhost:4000";
+
+    // PostMore 컴포넌트에 전달할 ConText
+    const cValue = "Context Value";
 
     const [isLoggedIn, setIsLoggedIn] = useState(() => {
         return localStorage.getItem("userId") !== null;
@@ -78,7 +82,7 @@ function Content() {
     useEffect(() => {
         // 로그인 여부를 확인하고 상태를 업데이트
         setIsLoggedIn(localStorage.getItem("userId") !== null);
-        
+
         fetchLikedSaved();
         fetchPostData();
         fetchCommentData();
@@ -231,7 +235,7 @@ function Content() {
                 const data = res.data.success;
 
                 console.log("좋아요 요청 : ", data)
-                
+
             }
         } catch (error) {
             console.error(error);
@@ -252,7 +256,7 @@ function Content() {
                 const data = res.data.success;
 
                 console.log("좋아요 요청 : ", data)
-                
+
             }
         } catch (error) {
             console.error(error);
@@ -287,7 +291,7 @@ function Content() {
                 const data = res.data.success;
 
                 console.log("글 저장 요청 : ", data)
-                
+
             }
         } catch (error) {
             console.error(error);
@@ -309,7 +313,7 @@ function Content() {
 
                 console.log("글 저장 요청 : ", data);
 
-                
+
             }
         } catch (error) {
             console.error(error);
@@ -391,10 +395,10 @@ function Content() {
                                                     <div className='post_content_info_comment' key={comment.COM_ID}>
                                                         <span><strong>{comment.USER_NICKNAME}</strong></span>
                                                         <span>{comment.COM_COMMENT}</span>
-                                                        <span  onClick={() => { dispatch(toogleCommentMore()) }}>
+                                                        <span onClick={() => { dispatch(toogleCommentMore()) }}>
                                                             <i
                                                                 className="fa-solid fa-ellipsis"
-                                                               
+
                                                             ></i>
                                                         </span>
                                                     </div>
@@ -427,10 +431,11 @@ function Content() {
                         )
 
                 ))}
-
+                <MyContext.Provider value={cValue}>
+                    {mainPostMoreVisible && <PostMore />}
+                    {mainCommentMoreVisible && <CommentMore />}
+                </MyContext.Provider>
             </div>
-            {mainPostMoreVisible && <PostMore />}
-            {mainCommentMoreVisible && <CommentMore />}
         </div >
     )
 
