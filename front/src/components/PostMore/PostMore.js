@@ -12,16 +12,16 @@ function PostMore() {
     const BASE_URL = "http://localhost:4000";
     
     // Content 컴포넌트에서 받은 value값
-    const { ContentIdData, getPostData } = useContext(PostMoreContext);
-    console.log("Conten.js 로 받은 데이터",ContentIdData);
+    const { postUserIdData, getPostData } = useContext(PostMoreContext);
+    console.log("Content.js 로 받은 데이터",postUserIdData);
 
     // 로컬스토리지의 회원 ID를 상태에 저장
     const [currentUserId, setCurrentUserId] = useState(localStorage.getItem("userId"));
 
     // 글, 회원 ID 정보 상태
     const [contentId, setContentId] = useState({
-        userId: ContentIdData.userId,
-        brdId: ContentIdData.brdId,
+        userId: postUserIdData.userId,
+        brdId: postUserIdData.brdId,
     })
 
     // 글작성자와 현재 로그인된 사용자가 일치하는지 여부 상태
@@ -53,7 +53,7 @@ function PostMore() {
             // 더보기 팝업 닫기
             dispatch(tooglePostMore())
         } catch (e) {
-
+            console.error(e);
         }
     }
 

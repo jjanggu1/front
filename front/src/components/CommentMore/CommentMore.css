@@ -13,7 +13,6 @@
 
 .commentMore_btns {
     width: 20%;
-    height: 16%;
     background-color: #fff;
     border-radius: 14px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -33,6 +32,6 @@
 .commentMore_btns button:nth-child(2) {
  color: red;
 }
-.commentMore_btns button:nth-child(3) {
+.commentMore_btns button:last-child {
     border: none;
 }

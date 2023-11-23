@@ -86,14 +86,15 @@ const mainCtrl = {
     },
 
     // 해당 글의 댓글 삭제
-    removeMainComment: async (req, res) => {
+    deleteMainComment: async (req, res) => {
         try {
             const { comId, userId } = req.body;
 
             const connection = await connectToDatabase();
 
             const [results] = await connection.query(`
-            DELETE FROM comment WHERE COM_ID = ? AND COM_WRITER = ?
+            DELETE FROM comment 
+            WHERE COM_ID = ? AND COM_WRITER = ?
             `, [comId, userId]);
 
             console.log('댓글이 성공적으로 삭제되었습니다.', results);

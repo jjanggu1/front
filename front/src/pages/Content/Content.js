@@ -3,7 +3,7 @@ import './Content.css';
 import PostMore from '../../components/PostMore/PostMore.js';
 import CommentMore from '../../components/CommentMore/CommentMore.js';
 import ImageSlider from '../../components/ImageSlider/ImageSlider.js';
-import { PostMoreContext } from '../../context/context.js';
+import { PostMoreContext, CommentMoreContext } from '../../context/context.js';
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect, createContext } from 'react';
 import axios from 'axios';
@@ -14,27 +14,43 @@ import { toogleCommentMore } from "../../store/store";
 
 function Content() {
     const BASE_URL = "http://localhost:4000";
- 
+
     // PostMore 컴포넌트에 전달할 ConText
-    const [ContentIdData, setContentIdData] = useState(
+    const [postUserIdData, setPostUserIdData] = useState(
         {
             userId: null, //해당 글의 USER_ID
             brdId: null, //해당 글의 BRD_ID
         }
     );
-
-    const getContentIdData = (brdId, userId) => {
-        setContentIdData({
+    // PostMore 컴포넌트에 전달할 데이터 가져오는 함수
+    const getPostUserIdData = (brdId, userId) => {
+        setPostUserIdData({
             userId: userId,
             brdId: brdId,
         });
     }
 
+    // CommentMore 컴포넌트에 전달할 ConText
+    const [commentUserIdData, setCommentUserIdData] = useState(
+        {
+            userId: null, //해당 댓글의 USER_ID
+            comId: null, //해당 댓글의 COM_ID
+        }
+    );
+    // CommentMore 컴포넌트에 전달할 데이터 가져오는 함수
+    const getCommentUserIdData = (comId, userId) => {
+        setCommentUserIdData({
+            userId: userId,
+            comId: comId,
+        });
+    }
+   
+    // 로그인 여부 상태
     const [isLoggedIn, setIsLoggedIn] = useState(() => {
         return localStorage.getItem("userId") !== null;
     });
 
-
+    // 더보기 모달 Redux
     let mainPostMoreVisible = useSelector(state => state.mainPostMoreVisible);
     let mainCommentMoreVisible = useSelector(state => state.mainCommentMoreVisible)
     let dispatch = useDispatch();
@@ -352,7 +368,7 @@ function Content() {
                                     </div>
                                     <div className="post_header_more"
                                         onClick={() => {
-                                            getContentIdData(item.BRD_ID, item.USER_ID);
+                                            getPostUserIdData(item.BRD_ID, item.USER_ID);
                                             dispatch(tooglePostMore());
                                         }}>
                                         <i className="fa-solid fa-ellipsis"></i>
@@ -410,10 +426,12 @@ function Content() {
                                                     <div className='post_content_info_comment' key={comment.COM_ID}>
                                                         <span><strong>{comment.USER_NICKNAME}</strong></span>
                                                         <span>{comment.COM_COMMENT}</span>
-                                                        <span onClick={() => { dispatch(toogleCommentMore()) }}>
+                                                        <span onClick={() => {
+                                                            getCommentUserIdData(comment.COM_ID, comment.COM_WRITER);
+                                                            dispatch(toogleCommentMore());
+                                                        }}>
                                                             <i
                                                                 className="fa-solid fa-ellipsis"
-
                                                             ></i>
                                                         </span>
                                                     </div>
@@ -444,10 +462,12 @@ function Content() {
                         )
 
                 ))}
-                <PostMoreContext.Provider value={{ ContentIdData, getPostData: fetchPostData }}>
+                <PostMoreContext.Provider value={{ postUserIdData, getPostData: fetchPostData }}>
                     {mainPostMoreVisible && <PostMore />}
-                    {mainCommentMoreVisible && <CommentMore />}
                 </PostMoreContext.Provider>
+                <CommentMoreContext.Provider value={{commentUserIdData, getCommentData: fetchCommentData}}>
+                    {mainCommentMoreVisible && <CommentMore />}
+                </CommentMoreContext.Provider>
             </div>
         </div >
     )

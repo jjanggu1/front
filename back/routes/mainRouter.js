@@ -17,6 +17,10 @@ router.route('/comments')
 router.route('/insertComment')
     .post(mainCtrl.insertMainComment)
 
+// 메인페이지 - 해당 글의 댓글 삭제
+router.route('/deleteComment')
+    .post(mainCtrl.deleteMainComment)
+
 
 // 메인페이지 - 현재 로그인된 회원 이미지 
 router.route('/crrUserImg')
