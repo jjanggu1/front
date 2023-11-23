@@ -3,7 +3,7 @@ import './Content.css';
 import PostMore from '../../components/PostMore/PostMore.js';
 import CommentMore from '../../components/CommentMore/CommentMore.js';
 import ImageSlider from '../../components/ImageSlider/ImageSlider.js';
-import { MyContext } from '../../context/context.js';
+import { PostMoreContext } from '../../context/context.js';
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect, createContext } from 'react';
 import axios from 'axios';
@@ -16,7 +16,19 @@ function Content() {
     const BASE_URL = "http://localhost:4000";
 
     // PostMore 컴포넌트에 전달할 ConText
-    const cValue = "Context Value";
+    const [ContentIdData, setContentIdData] = useState(
+        {
+            userId: null, //해당 글의 USER_ID
+            brdId: null, //해당 글의 BRD_ID
+        }
+    );
+
+    const getContentIdData = (brdId, userId) => {
+        setContentIdData({
+            userId: userId,
+            brdId: brdId,
+        });
+    }
 
     const [isLoggedIn, setIsLoggedIn] = useState(() => {
         return localStorage.getItem("userId") !== null;
@@ -339,7 +351,10 @@ function Content() {
                                         <span>{item.USER_NICKNAME}</span>
                                     </div>
                                     <div className="post_header_more"
-                                        onClick={() => { dispatch(tooglePostMore()) }}>
+                                        onClick={() => {
+                                            getContentIdData(item.BRD_ID, item.USER_ID);
+                                            dispatch(tooglePostMore());
+                                        }}>
                                         <i className="fa-solid fa-ellipsis"></i>
                                     </div>
                                 </div>
@@ -423,18 +438,16 @@ function Content() {
                                     </div>
                                     <button onClick={() => {
                                         fetchAddComment();
-                                        // getbrdId(item.BRD_ID);
-                                        // sendCommentRequest();
                                     }}>게시</button>
                                 </div>
                             </div>
                         )
 
                 ))}
-                <MyContext.Provider value={cValue}>
+                <PostMoreContext.Provider value={{ ContentIdData, getPostData: fetchPostData }}>
                     {mainPostMoreVisible && <PostMore />}
                     {mainCommentMoreVisible && <CommentMore />}
-                </MyContext.Provider>
+                </PostMoreContext.Provider>
             </div>
         </div >
     )

@@ -22,6 +22,25 @@ const mainCtrl = {
             console.error("게시물 목록 조회 실패", error);
         }
     },
+    //메인페이지 게시글 삭제
+    deleteMainPostData: async (req, res) => {
+        try {
+            const {userId, brdId} = req.body;
+
+            const connection = await connectToDatabase();
+
+            const [rows] = await connection.query(`
+            DELETE FROM board
+            WHERE BRD_ID = ? AND BRD_WRITER = ?
+            `,[brdId, userId]);
+            res.json({ success: true, message: '게시글이 삭제되었습니다.' });
+
+            connection.end(); // 연결 종료
+        } catch (error) {
+            console.error("게시물 삭제 실패", error);
+        }
+    },
+
     // 해당글의 댓글(최신순) 데이터
     getMainPostComment: async (req, res) => {
         try {
