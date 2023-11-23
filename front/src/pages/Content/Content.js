@@ -14,7 +14,7 @@ import { toogleCommentMore } from "../../store/store";
 
 function Content() {
     const BASE_URL = "http://localhost:4000";
-
+ 
     // PostMore 컴포넌트에 전달할 ConText
     const [ContentIdData, setContentIdData] = useState(
         {
