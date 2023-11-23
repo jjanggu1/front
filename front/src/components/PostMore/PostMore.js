@@ -18,7 +18,7 @@ function PostMore() {
     // 로컬스토리지의 회원 ID를 상태에 저장
     const [currentUserId, setCurrentUserId] = useState(localStorage.getItem("userId"));
 
-    // 글, 댓글, 회원 ID 정보 상태
+    // 글, 회원 ID 정보 상태
     const [contentId, setContentId] = useState({
         userId: ContentIdData.userId,
         brdId: ContentIdData.brdId,
@@ -41,7 +41,7 @@ function PostMore() {
             if(!isCurrentUserAuthor) {
                 return
             }
-            const res = await axios.post(`${BASE_URL}/api/main/deletePost`);
+            const res = await axios.post(`${BASE_URL}/api/main/deletePost`, contentId);
             const data = res.data.message;
 
             // 성공 메시지 출력
@@ -49,6 +49,9 @@ function PostMore() {
 
             // 게시글 목록 리렌더링
             getPostData();
+            
+            // 더보기 팝업 닫기
+            dispatch(tooglePostMore())
         } catch (e) {
 
         }
