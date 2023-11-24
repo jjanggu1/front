@@ -220,7 +220,7 @@ function Content() {
                 userId: userId
             }
             if (userId === null) {
-                alert("로그인 해주세요.");
+                return
             } else {
                 const res = await axios.post(`${BASE_URL}/api/main/likedSaved`, userIdData);
                 const data = res.data;
@@ -246,7 +246,10 @@ function Content() {
             await fetchRemoveLike(brdId);
         }
 
+        // 좋아요 버튼 리렌더링
         fetchLikedSaved();
+        // 게시글 목록 리렌더링(좋아요수 변경을 위함)
+        fetchPostData();
     }
 
     // 회원의 좋아요 추가 요청

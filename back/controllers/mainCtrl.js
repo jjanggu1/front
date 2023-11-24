@@ -40,6 +40,25 @@ const mainCtrl = {
             console.error("게시물 삭제 실패", error);
         }
     },
+    //메인페이지 게시글 신고
+    reportMainPostData: async (req, res) => {
+        try {
+            const { brdId } = req.body;
+
+            const connection = await connectToDatabase();
+
+            const [rows] = await connection.query(`
+            UPDATE board
+            SET BRD_REPORT = 1
+            WHERE BRD_ID = ?
+            `,[brdId]);
+            res.json({ success: true, message: '게시글이 신고되었습니다.' });
+
+            connection.end(); // 연결 종료
+        } catch (error) {
+            console.error("게시물 신고 실패", error);
+        }
+    },
 
     // 해당글의 댓글(최신순) 데이터
     getMainPostComment: async (req, res) => {
@@ -100,6 +119,29 @@ const mainCtrl = {
             console.log('댓글이 성공적으로 삭제되었습니다.', results);
 
             res.json({ success: true, message: '댓글이 삭제되었습니다.' });
+
+            connection.end(); // 연결 종료
+        } catch (error) {
+            console.error('예외 발생:', error);
+            res.status(500).json({ success: false, message: '서버 오류' });
+        }
+    },
+    // 해당 글의 댓글 신고
+    reportMainComment: async (req, res) => {
+        try {
+            const { comId } = req.body;
+
+            const connection = await connectToDatabase();
+
+            const [results] = await connection.query(`
+            UPDATE comment
+            SET COM_REPORT = 1
+            WHERE COM_ID = ?
+            `, [comId]);
+
+            console.log('댓글이 성공적으로 신고되었습니다.', results);
+
+            res.json({ success: true, message: '댓글이 신고되었습니다.' });
 
             connection.end(); // 연결 종료
         } catch (error) {

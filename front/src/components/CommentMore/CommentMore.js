@@ -12,6 +12,11 @@ import axios from 'axios';
 function CommentMore() {
     const BASE_URL = "http://localhost:4000";
 
+    // 로그인 여부 상태
+    const [isLoggedIn, setIsLoggedIn] = useState(() => {
+        return localStorage.getItem("userId") !== null;
+    });
+
     // Content 컴포넌트에서 받은 value값
     const {commentUserIdData, getCommentData} = useContext(CommentMoreContext);
     console.log("Content.js 로 받은 데이터",commentUserIdData);
@@ -59,12 +64,32 @@ function CommentMore() {
         }
     }
 
+    // 댓글 신고 요청
+    const reportComment = async () => {
+        try {
+            if (!isLoggedIn) {
+                alert("로그인이 필요합니다.");
+                return
+            }
+            const res = await axios.post(`${BASE_URL}/api/main/reportComment`, contentId);
+            const data = res.data.message;
+
+            // 성공 메시지 출력
+            alert(data);
+
+            // 더보기 팝업 닫기
+            dispatch(toogleCommentMore())
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
     let dispatch = useDispatch();
 
     return (
         <div className="commentMore_popup">
             <div className="commentMore_btns">
-                <button>신고</button>
+                <button onClick={reportComment}>신고</button>
                 {isCurrentUserAuthor ? (<button onClick={deleteComment}>삭제</button>) : null}
                 <button
                     onClick={() => { dispatch(toogleCommentMore()) }}

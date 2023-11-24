@@ -9,6 +9,10 @@ router.route('/')
 router.route('/deletePost')
     .post(mainCtrl.deleteMainPostData)
 
+// 메인페이지 - 글 신고
+router.route('/reportPost')
+    .post(mainCtrl.reportMainPostData)
+
 // 메인페이지 - 해당 글의 댓글
 router.route('/comments')
     .post(mainCtrl.getMainPostComment)
@@ -20,6 +24,10 @@ router.route('/insertComment')
 // 메인페이지 - 해당 글의 댓글 삭제
 router.route('/deleteComment')
     .post(mainCtrl.deleteMainComment)
+
+// 메인페이지 - 해당 글의 댓글 신고
+router.route('/reportComment')
+    .post(mainCtrl.reportMainComment)
 
 
 // 메인페이지 - 현재 로그인된 회원 이미지 

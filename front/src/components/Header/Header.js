@@ -42,7 +42,10 @@ function Header() {
     // 프로필 이미지 불러오기
     const getProfileImage = async () => {
         try {
-
+            if(!userIdValue) {
+                return
+            }
+            
             const userId = {
                 userId: userIdValue
             };
