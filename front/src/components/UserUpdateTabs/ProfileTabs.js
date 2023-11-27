@@ -67,7 +67,7 @@ function ProfileTabs() {
             reader.readAsDataURL(file);
         }
     };
-
+    console.log(selectedFile);
     // 제출버튼 클릭시 실행할 함수들
     const handleUploadButtonClick = async () => {
         await fetchUpdateUserInfo(); // 서버로 유저정보 업로드

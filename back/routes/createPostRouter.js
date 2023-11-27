@@ -5,6 +5,5 @@ const router = require("express").Router();
 router.route('/')
     .post(createPostCtrl.createPost)
 
-   
 
 module.exports = router;

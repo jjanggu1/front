@@ -34,4 +34,5 @@
 }
 .commentMore_btns button:last-child {
     border: none;
+    color: black;
 }
