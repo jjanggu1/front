@@ -44,7 +44,7 @@ function Content() {
             comId: comId,
         });
     }
-   
+
     // 로그인 여부 상태
     const [isLoggedIn, setIsLoggedIn] = useState(() => {
         return localStorage.getItem("userId") !== null;
@@ -120,7 +120,9 @@ function Content() {
 
     //이미지 경로 동적생성
     const generateImagePaths = (brdId, ...imageNames) => {
-        return imageNames.map(imageName => `http://localhost:4000/postImg/${brdId}/${imageName}`);
+        return imageNames
+        .filter(img => img !== null)
+        .map(imageName => `http://localhost:4000/postImg/${brdId}/${imageName}`);
     }
 
     // 게시글 얼마 전에 작성됐는지 구하는 로직
@@ -176,7 +178,7 @@ function Content() {
             comment: event.target.value
         }));
     };
-
+    
     const getBrdId = (brdId) => {
         const newBrdId = brdId;
         setCommentInfo((prevCommentInfo) => ({
@@ -396,7 +398,11 @@ function Content() {
                                                     ></i>
                                                 )
                                             }
-                                            <i className="fa-regular fa-comment"></i>
+                                            {item.BRD_COMMENT_OPEN === 1 ? (
+                                                <i className="fa-regular fa-comment"></i>
+                                            ) : (
+                                                null
+                                            )}
                                             {
                                                 userLikedSaved && userLikedSaved.length > 0 && userLikedSaved.some(element => element.SAVED_NUM === item.BRD_ID) ? (<i
                                                     className="fa-solid fa-bookmark"
@@ -447,20 +453,30 @@ function Content() {
                                     </div>
 
                                 </div>
-                                <div className="post_comment">
-                                    {isLoggedIn ? (<img src={`http://localhost:4000/profileImg/${item.USER_IMAGE}`} alt="프로필 이미지" />) : (<i className="fa-regular fa-circle-user fa-2x"></i>)}
-                                    <div className="post_comment_detail">
-                                        <input value={commentInfo.comment} onChange={(event) => {
-                                            inputCommentChange(event);
-                                            getBrdId(item.BRD_ID);
-                                        }
+                                {item.BRD_COMMENT_OPEN === 1 ? (
+                                    <div className="post_comment">
+                                        {isLoggedIn ? (<img src={`http://localhost:4000/profileImg/${item.USER_IMAGE}`} alt="프로필 이미지" />) : (<i className="fa-regular fa-circle-user fa-2x"></i>)}
+                                        <div className="post_comment_detail">
+                                            <input value={commentInfo.comment} onChange={(event) => {
+                                                inputCommentChange(event);
+                                                getBrdId(item.BRD_ID);
+                                            }
 
-                                        } type="text" placeholder="댓글 달기..." />
+                                            } type="text" placeholder="댓글 달기..." />
+                                        </div>
+                                        <button onClick={() => {
+                                            fetchAddComment();
+                                        }}>게시</button>
                                     </div>
-                                    <button onClick={() => {
-                                        fetchAddComment();
-                                    }}>게시</button>
-                                </div>
+                                ) : (
+                                    <div className="post_comment">
+                                        {isLoggedIn ? (<img src={`http://localhost:4000/profileImg/${item.USER_IMAGE}`} alt="프로필 이미지" />) : (<i className="fa-regular fa-circle-user fa-2x"></i>)}
+                                        <div className="post_comment_detail">
+                                            <span>작성자가 댓글을 제한한 글입니다.</span>
+                                        </div>
+                                    </div>
+                                )}
+
                             </div>
                         )
 
@@ -468,7 +484,7 @@ function Content() {
                 <PostMoreContext.Provider value={{ postUserIdData, getPostData: fetchPostData }}>
                     {mainPostMoreVisible && <PostMore />}
                 </PostMoreContext.Provider>
-                <CommentMoreContext.Provider value={{commentUserIdData, getCommentData: fetchCommentData}}>
+                <CommentMoreContext.Provider value={{ commentUserIdData, getCommentData: fetchCommentData }}>
                     {mainCommentMoreVisible && <CommentMore />}
                 </CommentMoreContext.Provider>
             </div>

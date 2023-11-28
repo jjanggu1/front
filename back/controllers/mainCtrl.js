@@ -86,7 +86,7 @@ const mainCtrl = {
     insertMainComment: async (req, res) => {
         try {
             const { brdId, userId, userNick, comment } = req.body;
-
+            console.log("댓글 추가 요청 값 : ", req.body)
             const connection = await connectToDatabase();
 
             const [results] = await connection.query(`

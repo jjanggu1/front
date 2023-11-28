@@ -2,6 +2,13 @@ const multer = require("multer");
 const path = require("path");
 const fs = require('fs');
 
+let dynamicDestination;
+
+// 함수를 통해 동적으로 destination 설정
+const setDynamicDestination = (destination) => {
+  dynamicDestination = destination;
+};
+
 // 파일을 저장할 디렉토리 설정
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -9,21 +16,25 @@ const storage = multer.diskStorage({
     if (file.fieldname === "profileImage") {
       uploadPath = "uploads/profile"; // 프로필 이미지 저장 경로
     } else if (file.fieldname === "postImage") {
-      uploadPath = "uploads/post"; // 게시글 이미지 저장 경로
+      if (dynamicDestination) {
+        uploadPath = dynamicDestination; // 동적으로 설정된 경로 사용
+      } else {
+        uploadPath = "uploads/post/default/"; // 기본 경로
+      }
     } else {
       uploadPath = "uploads/default"; // 기본 이미지 저장 경로
     }
 
     // 디렉토리가 존재하지 않으면 생성
     if (!fs.existsSync(uploadPath)) {
-        fs.mkdirSync(uploadPath, { recursive: true });
-      }
+      fs.mkdirSync(uploadPath, { recursive: true });
+    }
 
     cb(null, uploadPath);
   },
 
   filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); // 파일 이름 설정
+    cb(null, Date.now() + file.originalname); // 파일 이름 설정
   },
 });
 
@@ -40,7 +51,7 @@ const fileFilter = (req, file, cb) => {
   cb(null, true);
 };
 
-const upload = multer({
+const multerConfig = multer({
   storage: storage,
   fileFilter,
   limits: {
@@ -48,4 +59,7 @@ const upload = multer({
   },
 });
 
-module.exports = upload;
+// setDynamicDestination 함수를 외부에서 호출할 수 있도록 export
+multerConfig.setDynamicDestination = setDynamicDestination;
+
+module.exports = multerConfig;
