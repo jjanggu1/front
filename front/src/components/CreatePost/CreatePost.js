@@ -74,6 +74,9 @@ function CreatePost() {
             if (imgFiles.length === 0) {
                 alert("이미지를 선택해주세요.")
                 return
+            } else if (uploadPostData.content === "" ) {
+                alert("내용을 작성해주세요.")
+                return
             }
 
             const formData = new FormData();

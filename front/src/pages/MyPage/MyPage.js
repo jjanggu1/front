@@ -35,8 +35,11 @@ function MyPage() {
                     <div className='myPage_header_user'>
                         <div className='myPage_header_user_info'>
                             <span>dong9ri_</span>
-                            <a href="/userupdate">프로필 편집</a>
-                            <i className="fa-solid fa-gear"></i>
+                            <a href="/userupdate">
+                                프로필 편집
+                                <i className="fa-solid fa-gear"></i>
+                            </a>
+
                         </div>
                         <div className='myPage_header_user_community'>
                             <span>게시물 <strong>11</strong></span>

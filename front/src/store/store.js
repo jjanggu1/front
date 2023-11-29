@@ -80,6 +80,17 @@ let mainPostMoreVisible = createSlice({
     }
 })
 
+// 게시글 상세 모달
+let mainPostModalVisible = createSlice({
+    name: 'mainPostModalVisible',
+    initialState: false,
+    reducers : {
+        tooglePostModal(state) {
+            return !state;
+        }
+    }
+})
+
 // 댓글 더보기 팝업
 let mainCommentMoreVisible = createSlice({
     name: 'mainCommentMoreVisible',
@@ -103,6 +114,7 @@ export let { chooseTabs } = contentsVisible.actions
 export let { chooseUpdateUserTabs } = updateUserTabsVisible.actions
 
 export let { tooglePostMore } = mainPostMoreVisible.actions
+export let { tooglePostModal } = mainPostModalVisible.actions
 export let { toogleCommentMore } = mainCommentMoreVisible.actions
 
 
@@ -115,6 +127,7 @@ export default configureStore({
         contentsVisible: contentsVisible.reducer,
         updateUserTabsVisible: updateUserTabsVisible.reducer,
         mainPostMoreVisible: mainPostMoreVisible.reducer,
+        mainPostModalVisible: mainPostModalVisible.reducer,
         mainCommentMoreVisible: mainCommentMoreVisible.reducer,
     },
 });

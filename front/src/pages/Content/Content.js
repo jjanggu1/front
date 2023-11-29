@@ -1,18 +1,26 @@
 import './Content.css';
 
 import PostMore from '../../components/PostMore/PostMore.js';
+import PostModal from '../../components/PostModal/PostModal.js';
 import CommentMore from '../../components/CommentMore/CommentMore.js';
 import ImageSlider from '../../components/ImageSlider/ImageSlider.js';
 import { PostMoreContext, CommentMoreContext } from '../../context/context.js';
 import { useSelector, useDispatch } from "react-redux";
-import { useState, useEffect, createContext } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 // 리덕스툴킷 수정함수 임포트
 import { tooglePostMore } from "../../store/store";
+import { tooglePostModal } from "../../store/store";
 import { toogleCommentMore } from "../../store/store";
 
 function Content() {
+    // 더보기 모달 Redux
+    let mainPostMoreVisible = useSelector(state => state.mainPostMoreVisible);
+    let mainPostModalVisible = useSelector(state => state.mainPostModalVisible);
+    let mainCommentMoreVisible = useSelector(state => state.mainCommentMoreVisible)
+    let dispatch = useDispatch();
+    
     const BASE_URL = "http://localhost:4000";
 
     // PostMore 컴포넌트에 전달할 ConText
@@ -49,11 +57,6 @@ function Content() {
     const [isLoggedIn, setIsLoggedIn] = useState(() => {
         return localStorage.getItem("userId") !== null;
     });
-
-    // 더보기 모달 Redux
-    let mainPostMoreVisible = useSelector(state => state.mainPostMoreVisible);
-    let mainCommentMoreVisible = useSelector(state => state.mainCommentMoreVisible)
-    let dispatch = useDispatch();
 
     // 게시글 목록 데이터 상태
     const [postsData, setPostsData] = useState();
@@ -121,8 +124,8 @@ function Content() {
     //이미지 경로 동적생성
     const generateImagePaths = (brdId, ...imageNames) => {
         return imageNames
-        .filter(img => img !== null)
-        .map(imageName => `http://localhost:4000/postImg/${brdId}/${imageName}`);
+            .filter(img => img !== null)
+            .map(imageName => `http://localhost:4000/postImg/${brdId}/${imageName}`);
     }
 
     // 게시글 얼마 전에 작성됐는지 구하는 로직
@@ -178,7 +181,7 @@ function Content() {
             comment: event.target.value
         }));
     };
-    
+
     const getBrdId = (brdId) => {
         const newBrdId = brdId;
         setCommentInfo((prevCommentInfo) => ({
@@ -399,7 +402,7 @@ function Content() {
                                                 )
                                             }
                                             {item.BRD_COMMENT_OPEN === 1 ? (
-                                                <i className="fa-regular fa-comment"></i>
+                                                <i className="fa-regular fa-comment" onClick={dispatch(tooglePostModal())}></i>
                                             ) : (
                                                 null
                                             )}
@@ -484,6 +487,7 @@ function Content() {
                 <PostMoreContext.Provider value={{ postUserIdData, getPostData: fetchPostData }}>
                     {mainPostMoreVisible && <PostMore />}
                 </PostMoreContext.Provider>
+                {mainPostModalVisible && <PostModal />}
                 <CommentMoreContext.Provider value={{ commentUserIdData, getCommentData: fetchCommentData }}>
                     {mainCommentMoreVisible && <CommentMore />}
                 </CommentMoreContext.Provider>
