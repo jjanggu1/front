@@ -5,6 +5,10 @@ const router = require("express").Router();
 router.route('/')
     .get(mainCtrl.getMainPostData)
 
+// 메인페이지 - 게시글모달 게시글목록
+router.route('/modalPost')
+    .post(mainCtrl.getMainPostModalData)
+
 // 메인페이지 - 글 삭제
 router.route('/deletePost')
     .post(mainCtrl.deleteMainPostData)

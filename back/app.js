@@ -15,7 +15,6 @@ app.use(cors());
 app.use('/profileImg', express.static('uploads/profile'));
 app.use('/postImg', express.static('uploads/post'));
 
-app.use('/api/movie', require('./routes/movieRouter'));
 app.use('/api/mypage', require('./routes/mypageRouter'));
 app.use('/api/login', require('./routes/loginRouter'));
 app.use('/api/createPost', require('./routes/createPostRouter'));

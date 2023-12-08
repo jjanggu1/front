@@ -1,0 +1,168 @@
+.postModal_popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+}
+
+.postModal {
+    width: 80%;
+    height: 90%;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+    display: flex;
+}
+
+/* 이미지영역 */
+.postModal_image {
+    width: 60%;
+}
+
+.postModal_image img {
+    width: 100%;
+    height: 100%;
+}
+
+/* 컨텐츠영역 */
+.postModal_content {
+    width: 40%;
+}
+
+.postModal_content img {
+    width: 6%;
+}
+
+.postModal_header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    border-bottom: 1px solid #d7d7d7;
+    padding: 2% 3%;
+}
+
+.postModal_header span {
+    font-weight: bold;
+    margin-left: 2%;
+}
+
+.postModal_header i {
+    margin-left: auto;
+    font-size: large;
+}
+
+/* 댓글 영역 */
+.postModal_commentList {
+    padding: 1% 3%;
+    height: 70%;
+    border-bottom: 1px solid #d7d7d7;
+    overflow: auto;
+}
+.postModal_postInfo {
+    margin-bottom: 2%;
+}
+.postModal_comment,
+.postModal_postInfo {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-bottom: 2%;
+}
+
+.postModal_comment span:nth-child(2),
+.postModal_postInfo span:nth-child(2) {
+    padding-left: 3%;
+    font-weight: bold;
+}
+
+.postModal_comment span:nth-child(3),
+.postModal_postInfo span:nth-child(3) {
+    padding-left: 1%;
+}
+
+.postModal_comment i {
+    margin-left: auto;
+}
+
+/* 글 정보 영역 */
+.postModal_info {
+    height: 12%;
+    padding: 1% 3%;
+    border-bottom: 1px solid #d7d7d7;
+}
+
+.postModal_info_btns {
+    font-size: x-large;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 1%;
+}
+.postModal_info_btns i {
+    padding: 1%;
+}
+.postModal_info_btns i:last-child {
+    margin-left: auto;
+}
+.postModal_info_btns i:first-child {
+    margin-right: 1%;
+}
+
+/* 좋아요 수 영역 */
+.postModal_info_heart {
+    padding: 1%;
+}
+
+/* 시간 영역 */
+.postModal_info_time {
+    padding: 0 1%;
+    font-size: small;
+    color: #949494;
+}
+
+/* 댓글 영역 */
+.postModal_comment_input {
+    padding: 0.5% 3%;
+    height: 7%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.postModal_comment_input input {
+    width: 92%;
+    height: 100%;
+    border: none;
+    outline: none;
+}
+.postModal_comment_input button {
+    border: none;
+    background: none;
+    color: #099AFA;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 1%;
+}
+
+/* 닫기버튼 */
+#close {
+    position: fixed;
+    top: 2%;
+    right: 1%;
+    font-size: xx-large;
+    padding: 0.5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #d7d7d7;
+}

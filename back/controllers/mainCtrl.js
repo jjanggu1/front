@@ -22,17 +22,40 @@ const mainCtrl = {
             console.error("게시물 목록 조회 실패", error);
         }
     },
+    //메인페이지 게시글모달 게시글 목록(최신순) 데이터
+    getMainPostModalData: async (req, res) => {
+        try {
+            const { brdId } = req.body;
+            console.log("게시글 모달 : ", brdId);
+            const connection = await connectToDatabase();
+
+            const [rows] = await connection.query(`
+            SELECT board.BRD_ID, board.BRD_WRITER, board.BRD_NICK, board.BRD_IMAGE1, board.BRD_IMAGE2, board.BRD_IMAGE3, board.BRD_IMAGE4, board.BRD_IMAGE5, board.BRD_CON, board.BRD_HASHTAG, board.BRD_COMMENT_OPEN, board.BRD_REPORT, DATE_FORMAT(board.BRD_CREATED_AT, '%Y.%m.%d %r') AS BRD_CREATED_AT, user.USER_ID, user.USER_NICKNAME, user.USER_IMAGE, COUNT(likedpost.LIKED_NUM) AS LIKED_COUNT
+            FROM board
+            INNER JOIN user ON board.BRD_WRITER = user.USER_ID
+            LEFT JOIN likedpost ON board.BRD_ID = likedpost.LIKED_NUM
+            WHERE board.BRD_ID = ?
+            GROUP BY board.BRD_ID, user.USER_NICKNAME, user.USER_IMAGE
+            ORDER BY board.BRD_CREATED_AT DESC
+            `, [brdId]);
+            res.send(rows);
+            console.log(rows);
+            connection.end(); // 연결 종료
+        } catch (error) {
+            console.error("게시물 목록 조회 실패", error);
+        }
+    },
     //메인페이지 게시글 삭제
     deleteMainPostData: async (req, res) => {
         try {
-            const {userId, brdId} = req.body;
+            const { userId, brdId } = req.body;
 
             const connection = await connectToDatabase();
 
             const [rows] = await connection.query(`
             DELETE FROM board
             WHERE BRD_ID = ? AND BRD_WRITER = ?
-            `,[brdId, userId]);
+            `, [brdId, userId]);
             res.json({ success: true, message: '게시글이 삭제되었습니다.' });
 
             connection.end(); // 연결 종료
@@ -51,7 +74,7 @@ const mainCtrl = {
             UPDATE board
             SET BRD_REPORT = 1
             WHERE BRD_ID = ?
-            `,[brdId]);
+            `, [brdId]);
             res.json({ success: true, message: '게시글이 신고되었습니다.' });
 
             connection.end(); // 연결 종료

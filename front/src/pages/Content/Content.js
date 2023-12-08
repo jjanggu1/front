@@ -23,6 +23,9 @@ function Content() {
     
     const BASE_URL = "http://localhost:4000";
 
+    // PostModal 컴포넌트에 전달할 글 ID
+    const [postNum, setPostNum] = useState();
+
     // PostMore 컴포넌트에 전달할 ConText
     const [postUserIdData, setPostUserIdData] = useState(
         {
@@ -402,7 +405,12 @@ function Content() {
                                                 )
                                             }
                                             {item.BRD_COMMENT_OPEN === 1 ? (
-                                                <i className="fa-regular fa-comment" onClick={dispatch(tooglePostModal())}></i>
+                                                <i className="fa-regular fa-comment"
+                                                 onClick={() => {
+                                                    dispatch(tooglePostModal());
+                                                    setPostNum(item.BRD_ID);
+                                                }}
+                                                 ></i>
                                             ) : (
                                                 null
                                             )}
@@ -487,7 +495,7 @@ function Content() {
                 <PostMoreContext.Provider value={{ postUserIdData, getPostData: fetchPostData }}>
                     {mainPostMoreVisible && <PostMore />}
                 </PostMoreContext.Provider>
-                {mainPostModalVisible && <PostModal />}
+                {mainPostModalVisible && <PostModal value={postNum}/>}
                 <CommentMoreContext.Provider value={{ commentUserIdData, getCommentData: fetchCommentData }}>
                     {mainCommentMoreVisible && <CommentMore />}
                 </CommentMoreContext.Provider>
