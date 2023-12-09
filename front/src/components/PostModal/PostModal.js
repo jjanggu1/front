@@ -1,13 +1,19 @@
-import { useEffect, useState } from 'react';
-import './PostModal.css'
+import { useEffect, useState, forwardRef } from 'react';
+import './PostModal.css';
 import axios from 'axios';
 
-function PostModal(postNum) {
+import { tooglePostModal } from '../../store/store';
+import { useDispatch } from 'react-redux';
+
+// forwardRef를 사용하여 ref를 전달
+const PostModal = forwardRef(({ postNum }, ref) => {
     const BASE_URL = "http://localhost:4000";
+
+    let dispatch = useDispatch();
 
     // props로 받은 게시물 Id 저장
     const [brdId, setBrdId] = useState({
-        brdId: postNum.value
+        brdId: postNum
     });
 
     const [postData, setPostData] = useState(); // 글 데이터
@@ -40,10 +46,10 @@ function PostModal(postNum) {
     console.log(brdId.value);
     return (
         <div className='postModal_popup'>
-            <button id='close'>
+            <button id='close' onClick={() => dispatch(tooglePostModal())}>
                 <i className="fa-solid fa-xmark"></i>
             </button>
-            <div className='postModal'>
+            <div className='postModal' ref={ref}>
                 <div className='postModal_image'>
                     <img src={require("../../assets/img/main_img1.png")} alt="aa" />
                 </div>
@@ -86,7 +92,7 @@ function PostModal(postNum) {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+});
 
 export default PostModal;

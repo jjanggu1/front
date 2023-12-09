@@ -4,9 +4,10 @@ import PostMore from '../../components/PostMore/PostMore.js';
 import PostModal from '../../components/PostModal/PostModal.js';
 import CommentMore from '../../components/CommentMore/CommentMore.js';
 import ImageSlider from '../../components/ImageSlider/ImageSlider.js';
+import useOnClickOutside from '../../Hooks/useOnClickOutside.js';
 import { PostMoreContext, CommentMoreContext } from '../../context/context.js';
 import { useSelector, useDispatch } from "react-redux";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 
 // 리덕스툴킷 수정함수 임포트
@@ -15,13 +16,22 @@ import { tooglePostModal } from "../../store/store";
 import { toogleCommentMore } from "../../store/store";
 
 function Content() {
+    const BASE_URL = "http://localhost:4000";
+    
     // 더보기 모달 Redux
     let mainPostMoreVisible = useSelector(state => state.mainPostMoreVisible);
     let mainPostModalVisible = useSelector(state => state.mainPostModalVisible);
     let mainCommentMoreVisible = useSelector(state => state.mainCommentMoreVisible)
     let dispatch = useDispatch();
-    
-    const BASE_URL = "http://localhost:4000";
+
+    // 글 모달 Ref
+    const modalRef = useRef();
+
+    useOnClickOutside(modalRef, () => {
+        // 모달 외부를 클릭했을 때 실행할 코드
+        dispatch(tooglePostModal());
+    }, mainPostModalVisible);
+
 
     // PostModal 컴포넌트에 전달할 글 ID
     const [postNum, setPostNum] = useState();
@@ -406,11 +416,11 @@ function Content() {
                                             }
                                             {item.BRD_COMMENT_OPEN === 1 ? (
                                                 <i className="fa-regular fa-comment"
-                                                 onClick={() => {
-                                                    dispatch(tooglePostModal());
-                                                    setPostNum(item.BRD_ID);
-                                                }}
-                                                 ></i>
+                                                    onClick={() => {
+                                                        dispatch(tooglePostModal());
+                                                        setPostNum(item.BRD_ID);
+                                                    }}
+                                                ></i>
                                             ) : (
                                                 null
                                             )}
@@ -495,7 +505,7 @@ function Content() {
                 <PostMoreContext.Provider value={{ postUserIdData, getPostData: fetchPostData }}>
                     {mainPostMoreVisible && <PostMore />}
                 </PostMoreContext.Provider>
-                {mainPostModalVisible && <PostModal value={postNum}/>}
+                {mainPostModalVisible && <PostModal postNum={postNum} ref={modalRef} />}
                 <CommentMoreContext.Provider value={{ commentUserIdData, getCommentData: fetchCommentData }}>
                     {mainCommentMoreVisible && <CommentMore />}
                 </CommentMoreContext.Provider>
