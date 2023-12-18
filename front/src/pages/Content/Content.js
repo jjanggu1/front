@@ -17,7 +17,7 @@ import { toogleCommentMore } from "../../store/store";
 
 function Content() {
     const BASE_URL = "http://localhost:4000";
-    
+
     // 더보기 모달 Redux
     let mainPostMoreVisible = useSelector(state => state.mainPostMoreVisible);
     let mainPostModalVisible = useSelector(state => state.mainPostModalVisible);
@@ -179,7 +179,7 @@ function Content() {
     const userId = localStorage.getItem('userId');
     const userNick = localStorage.getItem('userNick');
 
-    // 서버로 요청할 댓글 데이터
+    // 서버로 댓글추가 요청할 데이터
     const [commentInfo, setCommentInfo] = useState({
         brdId: null,
         userId: userId,
@@ -502,15 +502,14 @@ function Content() {
                         )
 
                 ))}
-                <PostMoreContext.Provider value={{ postUserIdData, getPostData: fetchPostData }}>
-                    {mainPostMoreVisible && <PostMore />}
-                </PostMoreContext.Provider>
-                {mainPostModalVisible && <PostModal postNum={postNum} ref={modalRef} />}
-                <CommentMoreContext.Provider value={{ commentUserIdData, getCommentData: fetchCommentData }}>
-                    {mainCommentMoreVisible && <CommentMore />}
-                </CommentMoreContext.Provider>
+
+                {mainPostModalVisible && <PostModal postNum={postNum} rerenderLikedSaved={fetchLikedSaved} rerenderPostData={fetchPostData} ref={modalRef} />}
+
+                {mainPostMoreVisible && !mainPostModalVisible && <PostMore value={{ postUserIdData, getPostData: fetchPostData }} />}
+
+                {mainCommentMoreVisible && !mainPostModalVisible && <CommentMore value={{ commentUserIdData, getCommentData: fetchCommentData }} />}
             </div>
-        </div >
+        </div>
     )
 
 }

@@ -3,22 +3,23 @@ import './PostMore.css';
 import { useDispatch } from "react-redux";
 // 리덕스툴킷 수정함수 임포트
 import { tooglePostMore } from "../../store/store";
-import { useContext, useEffect, useState } from 'react';
+import { tooglePostModal } from "../../store/store";
+import { useEffect, useState } from 'react';
 
 import { PostMoreContext } from '../../context/context';
 import axios from 'axios';
 
-function PostMore() {
+function PostMore(props) {
+    const { postUserIdData, getPostData } = props.value;
+
     const BASE_URL = "http://localhost:4000";
+
+    console.log("Content.js 로 받은 데이터", postUserIdData);
 
     // 로그인 여부 상태
     const [isLoggedIn, setIsLoggedIn] = useState(() => {
         return localStorage.getItem("userId") !== null;
     });
-
-    // Content 컴포넌트에서 받은 value값
-    const { postUserIdData, getPostData } = useContext(PostMoreContext);
-    console.log("Content.js 로 받은 데이터", postUserIdData);
 
     // 로컬스토리지의 회원 ID를 상태에 저장
     const [currentUserId, setCurrentUserId] = useState(localStorage.getItem("userId"));
@@ -52,11 +53,13 @@ function PostMore() {
             // 성공 메시지 출력
             alert(data);
 
-            // 게시글 목록 리렌더링
-            getPostData();
-
             // 더보기 팝업 닫기
-            dispatch(tooglePostMore())
+            dispatch(tooglePostMore());
+            // 게시글 팝업 닫기
+            dispatch(tooglePostModal());
+
+            // 게시글 목록 리렌더링
+            props.rerenderPostList();
         } catch (e) {
             console.error(e);
         }
@@ -75,7 +78,12 @@ function PostMore() {
             alert(data);
 
             // 더보기 팝업 닫기
-            dispatch(tooglePostMore())
+            dispatch(tooglePostMore());
+            // 게시글 팝업 닫기
+            dispatch(tooglePostModal());
+
+            // 게시글 목록 리렌더링
+            props.rerenderPostList();
         } catch (e) {
             console.error(e);
         }
@@ -88,7 +96,7 @@ function PostMore() {
         <div className="postMore_popup">
             <div className="postMore_btns">
                 <button onClick={reportPost}>신고</button>
-                {isCurrentUserAuthor ? (<button onClick={fetchDeletePost}>삭제</button>) : null}
+                {isCurrentUserAuthor ? (<button onClick={fetchDeletePost}>삭제</button>) : (null)}
                 <button>팔로우 취소</button>
                 <button
                     onClick={() => { dispatch(tooglePostMore()) }}

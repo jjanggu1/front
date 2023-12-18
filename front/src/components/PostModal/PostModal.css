@@ -5,7 +5,7 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 9999;
+    z-index: 9;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -21,7 +21,9 @@
     z-index: 2;
     display: flex;
 }
-
+.postModal i {
+    cursor: pointer;
+}
 /* 이미지영역 */
 .postModal_image {
     width: 60%;

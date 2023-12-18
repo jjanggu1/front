@@ -1,15 +1,26 @@
 import { useEffect, useState, forwardRef, useRef } from 'react';
 import './PostModal.css';
 import ImageSlider from '../../components/ImageSlider/ImageSlider.js';
+import PostMore from '../../components/PostMore/PostMore.js';
+import CommentMore from '../../components/CommentMore/CommentMore.js';
 import axios from 'axios';
 
-import { tooglePostModal } from '../../store/store';
-import { useDispatch } from 'react-redux';
+import { tooglePostMore } from "../../store/store";
+import { tooglePostModal } from "../../store/store";
+import { toogleCommentMore } from "../../store/store";
+import { useDispatch, useSelector } from 'react-redux';
 
 // forwardRef를 사용하여 ref를 전달
-const PostModal = forwardRef(({ postNum }, ref) => {
+const PostModal = forwardRef(({ postNum, rerenderLikedSaved, rerenderPostData }, ref) => {
+    // 더보기 모달 Redux
+    let mainPostMoreVisible = useSelector(state => state.mainPostMoreVisible);
+    let mainCommentMoreVisible = useSelector(state => state.mainCommentMoreVisible)
     let dispatch = useDispatch();
 
+    //PostMore 컴포넌트로 전달할 함수
+    const rerenderPostList = () => {
+        rerenderPostData();
+    }
     // 댓글 입력 Ref
     const commentInputRef = useRef();
 
@@ -17,15 +28,46 @@ const PostModal = forwardRef(({ postNum }, ref) => {
         commentInputRef.current.focus();
     }
 
-    const userId = localStorage.getItem('userId'); //회원아아디 가져오기
+    //회원아아디, 닉네임 가져오기 
+    const userId = localStorage.getItem('userId');
+    const userNick = localStorage.getItem('userNick');
 
     // props로 받은 게시물 Id 저장
     const [brdId, setBrdId] = useState({
         brdId: postNum
     });
 
+    // PostMore 컴포넌트에 전달할 ConText
+    const [postUserIdData, setPostUserIdData] = useState(
+        {
+            userId: userId, //해당 글의 USER_ID
+            brdId: postNum, //해당 글의 BRD_ID
+        }
+    );
+    // PostMore 컴포넌트에 전달할 데이터 가져오는 함수
+    const getPostUserIdData = () => {
+        setPostUserIdData({
+            userId: userId,
+            brdId: postNum,
+        });
+    }
+
+    // CommentMore 컴포넌트에 전달할 ConText
+    const [commentUserIdData, setCommentUserIdData] = useState(
+        {
+            userId: userId, //해당 댓글의 USER_ID
+            comId: null, //해당 댓글의 COM_ID
+        }
+    );
+    // CommentMore 컴포넌트에 전달할 데이터 가져오는 함수
+    const getCommentUserIdData = (comId) => {
+        setCommentUserIdData({
+            userId: userId,
+            comId: comId,
+        });
+    }
     const [postData, setPostData] = useState(); // 글 데이터
-    const [commentData, setCommentData] = useState(); // 댓글 데이터
+    const [commentData, setCommentData] = useState(); // 댓글리스트 데이터
     const [userLikedSaved, setUserLikedSaved] = useState(); //회원이 좋아요, 저장한 글 데이터
 
     useEffect(() => {
@@ -59,7 +101,46 @@ const PostModal = forwardRef(({ postNum }, ref) => {
         }
     }
 
-    // 서버로 댓글 데이터 요청
+    // 서버로 댓글추가 요청할 데이터
+    const [commentInfo, setCommentInfo] = useState({
+        brdId: postNum,
+        userId: userId,
+        userNick: userNick,
+        comment: ''
+    });
+
+    // 댓글 input값 상태를 변경하는 함수
+    const inputCommentChange = (event) => {
+        setCommentInfo((prevComment) => ({
+            ...prevComment,
+            comment: event.target.value
+        }));
+    };
+
+    // 댓글 추가 요청 함수
+    const fetchAddComment = async () => {
+        try {
+            if (commentInfo.comment === "") {
+                alert("댓글을 입력하세요.")
+            } else {
+                console.log("commentInfo : ", commentInfo)
+                const res = await axios.post(`${BASE_URL}/api/main/insertComment`, commentInfo);
+                const data = res.data;
+                console.log(data);
+
+                // 댓글입력 초기화
+                setCommentInfo((prevComment) => ({
+                    ...prevComment,
+                    comment: ""
+                }));
+
+                fetchCommentData();
+            }
+        } catch (error) {
+            console.error("댓글 추가 실패", error);
+        }
+    }
+    // 서버로 좋아요, 저장한 글 데이터 요청
     const fetchLikedSaved = async () => {
         const setObjUserId = {
             userId: userId
@@ -91,6 +172,8 @@ const PostModal = forwardRef(({ postNum }, ref) => {
         fetchLikedSaved();
         // 게시글 목록 리렌더링(좋아요수 변경을 위함)
         fetchPostData();
+        // 상위 컴포넌트의 좋아요버튼 리렌더링
+        rerenderLikedSaved();
     }
 
     // 회원의 좋아요 추가 요청
@@ -147,6 +230,8 @@ const PostModal = forwardRef(({ postNum }, ref) => {
             await fetchRemoveSave(brdId);
         }
         fetchLikedSaved();
+        // 상위 컴포넌트의 좋아요버튼 리렌더링
+        rerenderLikedSaved();
     }
 
     // 회원의 저장글 추가 요청
@@ -252,7 +337,10 @@ const PostModal = forwardRef(({ postNum }, ref) => {
                         <div className='postModal_header'>
                             <img src={`http://localhost:4000/profileImg/${postData[0].USER_IMAGE}`} alt="프로필 이미지" />
                             <span>{postData[0].USER_NICKNAME}</span>
-                            <i className="fa-solid fa-ellipsis"></i>
+                            <i className="fa-solid fa-ellipsis" onClick={() => {
+                                getPostUserIdData();
+                                dispatch(tooglePostMore());
+                            }}></i>
                         </div>
                         <div className='postModal_commentList'>
                             <div className='postModal_postInfo'>
@@ -265,7 +353,10 @@ const PostModal = forwardRef(({ postNum }, ref) => {
                                     <img src={`http://localhost:4000/profileImg/${comment.USER_IMAGE}`} alt="" />
                                     <span>{comment.USER_NICKNAME}</span>
                                     <span>{comment.COM_COMMENT}</span>
-                                    <i className="fa-solid fa-ellipsis"></i>
+                                    <i className="fa-solid fa-ellipsis" onClick={() => {
+                                        getCommentUserIdData(comment.COM_ID);
+                                        dispatch(toogleCommentMore());
+                                    }}></i>
                                 </div>
                             ))}
 
@@ -292,8 +383,8 @@ const PostModal = forwardRef(({ postNum }, ref) => {
                             </div>
                         </div>
                         <div className='postModal_comment_input'>
-                            <input type="text" placeholder="댓글 달기..." ref={commentInputRef} />
-                            <button>게시</button>
+                            <input type="text" placeholder="댓글 달기..." value={commentInfo.comment} onChange={(event) => inputCommentChange(event)} ref={commentInputRef} />
+                            <button onClick={fetchAddComment}>게시</button>
                         </div>
                     </div>
                 </div>
@@ -302,7 +393,10 @@ const PostModal = forwardRef(({ postNum }, ref) => {
             )
             }
 
-        </div >
+            {mainPostMoreVisible && <PostMore value={{ postUserIdData }} rerenderPostList={rerenderPostList} />}
+
+            {mainCommentMoreVisible && <CommentMore value={{ commentUserIdData, getCommentData: fetchCommentData }} />}
+        </div>
     );
 });
 

@@ -4,12 +4,13 @@ import { useDispatch } from "react-redux";
 // 리덕스툴킷 수정함수 임포트
 import { toogleCommentMore } from "../../store/store";
 
-import { CommentMoreContext } from '../../context/context';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 
-function CommentMore() {
+function CommentMore(props) {
+    const { commentUserIdData, getCommentData } = props.value;
+
     const BASE_URL = "http://localhost:4000";
 
     // 로그인 여부 상태
@@ -17,8 +18,6 @@ function CommentMore() {
         return localStorage.getItem("userId") !== null;
     });
 
-    // Content 컴포넌트에서 받은 value값
-    const {commentUserIdData, getCommentData} = useContext(CommentMoreContext);
     console.log("Content.js 로 받은 데이터",commentUserIdData);
 
     // 로컬스토리지의 회원 ID를 상태에 저장
