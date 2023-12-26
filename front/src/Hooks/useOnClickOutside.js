@@ -3,9 +3,11 @@ import { useSelector } from "react-redux";
 
 export default function useOnClickOutside(ref, handler) {
   let mainPostModalVisible = useSelector(state => state.mainPostModalVisible);
+  let mainPostMoreVisible = useSelector(state => state.mainPostMoreVisible);
+  let mainCommentMoreVisible = useSelector(state => state.mainCommentMoreVisible);
 
   useEffect(() => {
-    if (mainPostModalVisible) {
+    if (!mainPostModalVisible || mainPostMoreVisible || mainCommentMoreVisible) {
       return
     } else {
       const listener = (e) => {

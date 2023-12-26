@@ -5,7 +5,6 @@ import PostModal from '../../components/PostModal/PostModal.js';
 import CommentMore from '../../components/CommentMore/CommentMore.js';
 import ImageSlider from '../../components/ImageSlider/ImageSlider.js';
 import useOnClickOutside from '../../Hooks/useOnClickOutside.js';
-import { PostMoreContext, CommentMoreContext } from '../../context/context.js';
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
@@ -21,7 +20,7 @@ function Content() {
     // 더보기 모달 Redux
     let mainPostMoreVisible = useSelector(state => state.mainPostMoreVisible);
     let mainPostModalVisible = useSelector(state => state.mainPostModalVisible);
-    let mainCommentMoreVisible = useSelector(state => state.mainCommentMoreVisible)
+    let mainCommentMoreVisible = useSelector(state => state.mainCommentMoreVisible);
     let dispatch = useDispatch();
 
     // 글 모달 Ref

@@ -5,9 +5,15 @@
     flex-wrap: wrap;
 }
 .myPage_liked img {
+    object-fit: fill;
+    width: 100%;
+}
+.myPage_liked button {
     width: 32%;
     margin-bottom: 2%;
+    border: none;
+    cursor: pointer;
 }
-.myPage_liked img:nth-child(3n-1) {
+.myPage_liked button:nth-child(3n-1) {
     margin: 0 2% 2% 2%;
 }

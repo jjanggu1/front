@@ -7,6 +7,7 @@ import UserUpdate from './pages/UserUpdate/UserUpdate.js';
 
 // Components
 import Follower from './components/Follower/Follower.js';
+import PostModal from './components/PostModal/PostModal.js';
 // import PostTabs from './components/MyPageTabs/PostTabs.js';
 // import SavedTabs from './components/MyPageTabs/SavedTabs.js';
 // import LikedTabs from './components/MyPageTabs/LikedTabs.js';
@@ -36,6 +37,7 @@ function App() {
           <Route path="/userupdate" element={isLoggedIn ? <UserUpdate /> : <Navigate to="/login" />} />
           {/* components */}
           <Route path="/follower" element={<Follower />} />
+          <Route path="/post/:id" element={<PostModal />} />
           {/* <Route path="/follower" element={<PostTabs />} />
           <Route path="/follower" element={<SavedTabs />} />
           <Route path="/follower" element={<LikedTabs />} /> */}

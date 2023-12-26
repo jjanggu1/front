@@ -12,8 +12,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { toggleFollower } from "../../store/store";
 import { toggleFollowing } from "../../store/store";
 import { chooseTabs } from "../../store/store";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 function MyPage() {
+    const BASE_URL = "http://localhost:4000";
+
+
     let isFollowerVisible = useSelector(state => state.followerVisible);
     let isFollowingVisible = useSelector(state => state.followingVisible)
     let contentsVisible = useSelector(state => state.contentsVisible)
@@ -24,17 +29,62 @@ function MyPage() {
     // const toggleFollower = () => {
     //     setFollowerVisible(!isFollowerVisible);
     // }
+
+    // 유저 아이디
+    const [userId, setUserId] = useState({
+        userId: localStorage.getItem("userId")
+    });
+
+
+    // 회원 데이터
+    const [userData, setUserData] = useState();
+
+    // 회원데이터 요청 함수
+    const fetchUserData = async () => {
+        try {
+            const res = await axios.post(`${BASE_URL}/api/mypage`, userId); //게시글 목록 요청
+            const data = res.data;
+            await setUserData(data);
+
+            return data; // 데이터 반환
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    // 회원 데이터
+    const [userPostCountData, setUserPostCountData] = useState(0);
+
+    // 작성한 게시물 수 요청 함수
+    const fetchPostCounData = async () => {
+        try {
+            const res = await axios.post(`${BASE_URL}/api/mypage/getUserPostCount`, userId); //작성한 게시물 수 요청
+            const data = res.data;
+            await setUserPostCountData(data);
+
+            return data; // 데이터 반환
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    useEffect(() => {
+        fetchPostCounData();
+        fetchUserData();
+    }, []);
+    console.log("마이페이지회원 데이터", userData)
+    console.log("마이페이지회원 게시글 수 : ", userPostCountData)
     return (
         <div className='myPage_wrap'>
             <Header />
             <div className='myPage'>
                 <div className='myPage_header'>
                     <div className='myPage_header_userImg'>
-                        <img src={require("../../assets/img/me.jpg")} alt="프로필이미지" />
+                        <img src={`http://localhost:4000/profileImg/${userData && userData[0].USER_IMAGE}`} alt="프로필이미지" />
                     </div>
                     <div className='myPage_header_user'>
                         <div className='myPage_header_user_info'>
-                            <span>dong9ri_</span>
+                            <span>{userData && userData[0].USER_NICKNAME}</span>
                             <a href="/userupdate">
                                 프로필 편집
                                 <i className="fa-solid fa-gear"></i>
@@ -42,15 +92,15 @@ function MyPage() {
 
                         </div>
                         <div className='myPage_header_user_community'>
-                            <span>게시물 <strong>11</strong></span>
+                            <span>게시물 <strong>{userPostCountData && userPostCountData[0].totalPostCount}</strong></span>
                             <span onClick={() => { dispatch(toggleFollower()) }}>팔로워 <strong>3</strong></span>
                             <span onClick={() => { dispatch(toggleFollowing()) }}>팔로우 <strong>3</strong></span>
                         </div>
                         <div className='myPage_header_user_name'>
-                            <span>동진</span>
+                            <span>{userData && userData[0].USER_NAME}</span>
                         </div>
                         <div className='myPage_header_user_introduction'>
-                            <span>추억 일상 피드 :)</span>
+                            <span>{userData && userData[0].USER_INTRO}</span>
                         </div>
                     </div>
                 </div>

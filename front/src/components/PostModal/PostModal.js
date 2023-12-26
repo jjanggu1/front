@@ -349,7 +349,7 @@ const PostModal = forwardRef(({ postNum, rerenderLikedSaved, rerenderPostData },
                                 <span>{postData[0].BRD_CON}</span>
                             </div>
                             {commentData && commentData.map(comment => (
-                                <div className='postModal_comment'>
+                                <div className='postModal_comment' key={comment.COM_ID}>
                                     <img src={`http://localhost:4000/profileImg/${comment.USER_IMAGE}`} alt="" />
                                     <span>{comment.USER_NICKNAME}</span>
                                     <span>{comment.COM_COMMENT}</span>

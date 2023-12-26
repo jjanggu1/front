@@ -3,7 +3,11 @@ const router = require("express").Router();
 
 // 마이페이지 - 유저데이터, 게시물 데이터
 router.route('/')
-    .get(mypageCtrl.getUserData)
+    .post(mypageCtrl.getUserData)
+
+// 마이페이지 - 작성한 게시물 수 데이터
+router.route('/getUserPostCount')
+    .post(mypageCtrl.getUserPostCountData)
 
 // 마이페이지 - 게시물 데이터
 router.route('/getPostsData')

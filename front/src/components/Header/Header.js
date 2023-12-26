@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import axios from 'axios';
 import { toggleCreatePost } from "../../store/store";
+import { Link } from 'react-router-dom';
 
 function Header() {
     const BASE_URL = "http://localhost:4000";
@@ -67,7 +68,7 @@ function Header() {
         <div className="header">
             <div className="header_content">
                 <div className="logo">
-                    <span><a href="/">memories</a></span>
+                    <span><Link to="/">memories</Link></span>
                 </div>
 
                 <div className="search">
@@ -75,18 +76,18 @@ function Header() {
                 </div>
 
                 <div className="service">
-                    <a href="/">
+                    <Link to="/">
                         <i className="fa-solid fa-house-chimney fa-xl"></i>
-                    </a>
+                    </Link>
                     <a href="#"><i className="fa-regular fa-square-plus fa-2x" onClick={activeLoggedIn}></i></a>
-                    <a href="/mypage">
+                    <Link to="/mypage">
                         {previewImage ? (
                             <img src={previewImage} alt="프로필 이미지" />
                         ) : (
                             <i className="fa-regular fa-circle-user fa-2x"></i>
                         )}
 
-                    </a>
+                    </Link>
                     {isLoggedIn === false ? <a href="/login" className="loginBtn">로그인</a> : (
                         <a href="#" onClick={logout}><i className="fa-solid fa-right-from-bracket fa-xl"></i></a>
                     )}
