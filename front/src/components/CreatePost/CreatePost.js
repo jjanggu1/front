@@ -68,16 +68,35 @@ function CreatePost() {
         });
     };
 
+    // 해시태그 필터링
+    const filterHashtag = () => {
+        const hashtagRegex = /#[\wㄱ-ㅎㅏ-ㅣ가-힣]+/g;
+
+        const hashtagsArray = uploadPostData.content.match(hashtagRegex);
+        console.log("content : ", uploadPostData.content);
+        console.log("hashtagsArray : ", hashtagsArray);
+
+        if (hashtagsArray) {
+            const result = hashtagsArray.join(" ");
+            setUploadPostData((prevData) => ({
+                ...prevData,
+                hashtag: result,
+            }));
+        }
+
+    }
     const fetchUploadPost = async (e) => {
         e.preventDefault();
         try {
             if (imgFiles.length === 0) {
                 alert("이미지를 선택해주세요.")
                 return
-            } else if (uploadPostData.content === "" ) {
+            } else if (uploadPostData.content === "") {
                 alert("내용을 작성해주세요.")
                 return
             }
+
+            filterHashtag(); //해쉬태그 필터링
 
             const formData = new FormData();
 
@@ -103,7 +122,7 @@ function CreatePost() {
                 dispatch(toggleCreatePost());
                 window.location.replace("/");
             }
-
+            console.log("업로드할 데이터 : ", uploadPostData);
         } catch (e) {
             console.error(e);
         }
@@ -114,7 +133,9 @@ function CreatePost() {
             <form className="createPost" encType="multipart/form-data">
                 <div className="createPost_header">
                     <button onClick={() => { dispatch(toggleCreatePost()) }}>취소</button>
-                    <button onClick={fetchUploadPost}>공유</button>
+                    <button onClick={
+                        fetchUploadPost
+                    }>공유</button>
                 </div>
                 <div className="createPost_uploadImg">
                     <input ref={imgRef} id='image' type="file" onChange={saveImgFile} accept="image/*" multiple />

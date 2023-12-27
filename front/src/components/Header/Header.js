@@ -64,6 +64,8 @@ function Header() {
         }
     };
 
+    const [searchInput, setSearchInput] = useState("");
+
     return (
         <div className="header">
             <div className="header_content">
@@ -72,7 +74,7 @@ function Header() {
                 </div>
 
                 <div className="search">
-                    <input type="text" placeholder="검색" />
+                    <input onChange={(event) => setSearchInput(event.target.value)} value={searchInput} type="text" placeholder="검색" />
                 </div>
 
                 <div className="service">
