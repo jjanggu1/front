@@ -3,6 +3,7 @@ import Home from './pages/Home/Home.js';
 import Login from './pages/Login/Login.js';
 import Join from './pages/Join/Join.js';
 import MyPage from './pages/MyPage/MyPage.js';
+import Profile from './components/Profile/Profile.js';
 import UserUpdate from './pages/UserUpdate/UserUpdate.js';
 
 // Components
@@ -34,6 +35,7 @@ function App() {
           <Route path="/login" element={isLoggedIn ? <Navigate to="/" />: <Login />} />
           <Route path="/join" element={<Join />} />
           <Route path="/mypage" element={isLoggedIn ? <MyPage /> : <Navigate to="/login" />} />
+          <Route path="/profile/:username" element={<Profile />} />
           <Route path="/userupdate" element={isLoggedIn ? <UserUpdate /> : <Navigate to="/login" />} />
           {/* components */}
           <Route path="/follower" element={<Follower />} />

@@ -43,10 +43,10 @@ function Header() {
     // 프로필 이미지 불러오기
     const getProfileImage = async () => {
         try {
-            if(!userIdValue) {
+            if (!userIdValue) {
                 return
             }
-            
+
             const userId = {
                 userId: userIdValue
             };
@@ -75,6 +75,22 @@ function Header() {
 
                 <div className="search">
                     <input onChange={(event) => setSearchInput(event.target.value)} value={searchInput} type="text" placeholder="검색" />
+                    {searchInput.trim() !== '' ? (
+                        <div className='searchList'>
+                            <Link>
+                                <div className='searchList_column'>
+                                    <img src={require("../../assets/img/me.jpg")} alt="" />
+                                    <div className='searchList_column_row'>
+                                        <span>dong9ri</span>
+                                        <span>동진</span>
+                                    </div>
+                                </div>
+                            </Link>
+                        </div>
+                    ) : (
+                        null
+                    )}
+
                 </div>
 
                 <div className="service">

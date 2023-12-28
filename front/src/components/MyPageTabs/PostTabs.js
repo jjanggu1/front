@@ -7,9 +7,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
-function PostTabs() {
+function PostTabs(props) {
     const BASE_URL = "http://localhost:4000";
-
     let mainPostModalVisible = useSelector(state => state.mainPostModalVisible);
     let dispatch = useDispatch();
 
@@ -26,9 +25,8 @@ function PostTabs() {
 
     // 유저 아이디
     const [userId, setUserId] = useState({
-        userId: localStorage.getItem("userId")
+        userId: props.userId.userId
     });
-
     // 게시글 목록 데이터
     const [postsData, setPostsData] = useState();
 
