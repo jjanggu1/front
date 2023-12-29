@@ -61,6 +61,8 @@ router.route('/removeSave')
     .post(mainCtrl.removeSave)
 
 
-
+// 메인페이지(검색) - 회원 조회
+router.route('/findUser')
+    .post(mainCtrl.findUser)
 
 module.exports = router;

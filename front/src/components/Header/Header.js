@@ -66,6 +66,36 @@ function Header() {
 
     const [searchInput, setSearchInput] = useState("");
 
+    // 검색된 데이터 
+    const [searchData, setSearchData] = useState();
+
+    // 회원&해시태그 검색
+    const fetchSearchData = async () => {
+        const sendSearchData = {
+            memberNick: searchInput
+        }
+        if (sendSearchData.memberNick === "") {
+            return
+        }
+        try {
+            const res = await axios.post(`${BASE_URL}/api/main/findUser`, sendSearchData);
+            const data = res.data;
+
+            await setSearchData(data);
+
+            return data;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    // 인풋값이 바뀔때만 검색 요청
+    useEffect(() => {
+        fetchSearchData();
+    }, [searchInput]);
+
+    console.log("검색 인풋 : ", searchInput);
+    console.log("검색된 데이터 : ", searchData);
     return (
         <div className="header">
             <div className="header_content">
@@ -74,18 +104,23 @@ function Header() {
                 </div>
 
                 <div className="search">
-                    <input onChange={(event) => setSearchInput(event.target.value)} value={searchInput} type="text" placeholder="검색" />
+                    <input onChange={(event) =>
+                        setSearchInput(event.target.value)
+                    } value={searchInput} type="text" placeholder="검색" />
                     {searchInput.trim() !== '' ? (
                         <div className='searchList'>
-                            <Link>
-                                <div className='searchList_column'>
-                                    <img src={require("../../assets/img/me.jpg")} alt="" />
-                                    <div className='searchList_column_row'>
-                                        <span>dong9ri</span>
-                                        <span>동진</span>
+                            {searchData && searchData.map((item) => (
+                                <Link to={`/profile/${item.USER_ID}`} key={item.USER_ID}>
+                                    <div className='searchList_column'>
+                                    <img src={`http://localhost:4000/profileImg/${item.USER_IMAGE}`} alt="프로필 이미지" />
+                                        <div className='searchList_column_row'>
+                                            <span>{item.USER_NICKNAME}</span>
+                                            <span>{item.USER_NAME}</span>
+                                        </div>
                                     </div>
-                                </div>
-                            </Link>
+                                </Link>
+                            ))}
+
                         </div>
                     ) : (
                         null

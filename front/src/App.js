@@ -31,7 +31,6 @@ function App() {
     <div className="App">
         <Routes>
           {/* pages */}
-          <Route path="/" element={<Home />} />
           <Route path="/login" element={isLoggedIn ? <Navigate to="/" />: <Login />} />
           <Route path="/join" element={<Join />} />
           <Route path="/mypage" element={isLoggedIn ? <MyPage /> : <Navigate to="/login" />} />
@@ -42,7 +41,8 @@ function App() {
           <Route path="/post/:id" element={<PostModal />} />
           {/* <Route path="/follower" element={<PostTabs />} />
           <Route path="/follower" element={<SavedTabs />} />
-          <Route path="/follower" element={<LikedTabs />} /> */}
+        <Route path="/follower" element={<LikedTabs />} /> */}
+        <Route path="/" element={<Home />} />
         </Routes>
     </div>
   );

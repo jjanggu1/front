@@ -21,7 +21,7 @@ function Profile() {
 
     const params = useParams();
     const paramsUsername = params.username;
-
+    console.log("라우터 파람스",paramsUsername)
 
     let isFollowerVisible = useSelector(state => state.followerVisible);
     let isFollowingVisible = useSelector(state => state.followingVisible)
@@ -38,7 +38,7 @@ function Profile() {
     const [userId, setUserId] = useState({
         userId: paramsUsername
     });
-
+    
 
     // 회원 데이터
     const [userData, setUserData] = useState();
@@ -73,9 +73,16 @@ function Profile() {
     }
 
     useEffect(() => {
+        setUserId({
+            userId: paramsUsername
+        })
         fetchPostCountData();
         fetchUserData();
-    }, []);
+    }, [params]);
+    // useEffect(() => {
+    //     fetchPostCountData();
+    //     fetchUserData();
+    // }, []);
     console.log("마이페이지회원 데이터", userData)
     console.log("마이페이지회원 게시글 수 : ", userPostCountData)
     return (

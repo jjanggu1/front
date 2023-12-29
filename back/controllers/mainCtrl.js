@@ -298,6 +298,29 @@ const mainCtrl = {
     },
 
 
+    // 검색 - 회원 조회
+    findUser: async (req, res) => {
+        try {
+            const memberNick = req.body.memberNick;
+
+            const connection = await connectToDatabase();
+
+            const [rows] = await connection.query(`
+                SELECT USER_ID, USER_NICKNAME, USER_NAME, USER_IMAGE
+                FROM user
+                WHERE USER_NICKNAME LIKE ? OR USER_NAME LIKE ?
+                UNION
+                SELECT USER_ID, USER_NICKNAME, USER_NAME, USER_IMAGE
+                FROM user
+                WHERE USER_NAME LIKE ? OR USER_NICKNAME LIKE ?
+                `, [`${memberNick}%`, `${memberNick}%`, `${memberNick}%`, `${memberNick}%`]);
+            res.send(rows);
+
+            connection.end(); // 연결 종료
+        } catch (error) {
+            console.error("회원 검색에 실패하였습니다.", error);
+        }
+    },
 }
 
 
