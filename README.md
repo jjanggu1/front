@@ -51,4 +51,4 @@ SNS는 일상을 공유할 수 있습니다. 하지만 자신이 집중하고 �
 
 <br/>
 
-📃 memories Notion 👉 https://petalite-cheek-f6c.notion.site/f46eeafb61af412da21a65e60bcde155?pvs=4
+📃 memories Notion 👉 https://petalite-cheek-f6c.notion.site/memories-22720afe230e408c904dffc42429463b
