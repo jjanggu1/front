@@ -19,9 +19,8 @@ import axios from 'axios';
 function Profile() {
     const BASE_URL = "http://localhost:4000";
 
-    const params = useParams();
-    const paramsUsername = params.username;
-    console.log("라우터 파람스",paramsUsername)
+    const { username } = useParams();
+    console.log("라우터 파람스", username)
 
     let isFollowerVisible = useSelector(state => state.followerVisible);
     let isFollowingVisible = useSelector(state => state.followingVisible)
@@ -35,10 +34,12 @@ function Profile() {
     // }
 
     // 유저 아이디
-    const [userId, setUserId] = useState({
-        userId: paramsUsername
-    });
-    
+    // const [userId, setUserId] = useState({
+    //     userId: username
+    // });
+    const userId = {
+        userId: username
+      };
 
     // 회원 데이터
     const [userData, setUserData] = useState();
@@ -73,12 +74,12 @@ function Profile() {
     }
 
     useEffect(() => {
-        setUserId({
-            userId: paramsUsername
-        })
+        // setUserId({
+        //     userId: username
+        // })
         fetchPostCountData();
         fetchUserData();
-    }, [params]);
+    }, [username]);
     // useEffect(() => {
     //     fetchPostCountData();
     //     fetchUserData();

@@ -12,6 +12,7 @@ function PostTabs(props) {
     let mainPostModalVisible = useSelector(state => state.mainPostModalVisible);
     let dispatch = useDispatch();
 
+    console.log("프롭스",props.userId)
     // 글 모달 Ref
     const modalRef = useRef();
 
@@ -24,9 +25,10 @@ function PostTabs(props) {
     const [postNum, setPostNum] = useState();
 
     // 유저 아이디
-    const [userId, setUserId] = useState({
+    const userId = {
         userId: props.userId.userId
-    });
+      };
+
     // 게시글 목록 데이터
     const [postsData, setPostsData] = useState();
 
@@ -68,7 +70,7 @@ function PostTabs(props) {
 
     useEffect(() => {
         fetchPostData();
-    }, []);
+    }, [userId.userId]);
 
     console.log("유저 아이디 : ", userId);
     console.log("게시글 데이터 : ", postsData);

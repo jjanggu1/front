@@ -26,9 +26,9 @@ function SavedTabs(props) {
     const [postNum, setPostNum] = useState();
 
     // 유저 아이디
-    const [userId, setUserId] = useState({
+    const userId = {
         userId: props.userId.userId
-    });
+      };
 
     // 저장된 게시글 목록 데이터
     const [postsData, setPostsData] = useState();
@@ -71,7 +71,7 @@ function SavedTabs(props) {
 
     useEffect(() => {
         fetchSavedData();
-    }, []);
+    }, [userId.userId]);
 
     return (
         <div className='savedTabs'>

@@ -25,9 +25,9 @@ function LikedTabs(props) {
     const [postNum, setPostNum] = useState();
 
     // 유저 아이디
-    const [userId, setUserId] = useState({
+    const userId = {
         userId: props.userId.userId
-    });
+      };
 
     // 게시글 목록 데이터
     const [postsData, setPostsData] = useState();
@@ -70,7 +70,7 @@ function LikedTabs(props) {
 
     useEffect(() => {
         fetchLikedData();
-    }, []);
+    }, [userId.userId]);
 
     console.log("유저 아이디 : ", userId);
     console.log("게시글 데이터 : ", postsData);

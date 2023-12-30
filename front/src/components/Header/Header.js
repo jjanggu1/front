@@ -1,7 +1,7 @@
 import './Header.css';
 import CreatePost from '../CreatePost/CreatePost';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import axios from 'axios';
 import { toggleCreatePost } from "../../store/store";
@@ -94,6 +94,10 @@ function Header() {
         fetchSearchData();
     }, [searchInput]);
 
+    const allEraseInput = () => {
+        setSearchInput("");
+    }
+
     console.log("검색 인풋 : ", searchInput);
     console.log("검색된 데이터 : ", searchData);
     return (
@@ -104,22 +108,29 @@ function Header() {
                 </div>
 
                 <div className="search">
-                    <input onChange={(event) =>
-                        setSearchInput(event.target.value)
-                    } value={searchInput} type="text" placeholder="검색" />
+                    <div className='searchBox'>
+                        <input onChange={(event) =>
+                            setSearchInput(event.target.value)
+                        } value={searchInput} type="text" placeholder="검색" />
+                        <i className="fa-solid fa-xmark" onClick={allEraseInput}></i>
+                    </div>
                     {searchInput.trim() !== '' ? (
                         <div className='searchList'>
-                            {searchData && searchData.map((item) => (
-                                <Link to={`/profile/${item.USER_ID}`} key={item.USER_ID}>
-                                    <div className='searchList_column'>
-                                    <img src={`http://localhost:4000/profileImg/${item.USER_IMAGE}`} alt="프로필 이미지" />
-                                        <div className='searchList_column_row'>
-                                            <span>{item.USER_NICKNAME}</span>
-                                            <span>{item.USER_NAME}</span>
+                            {searchData && searchData.length > 0 ? (
+                                searchData.map((item) => (
+                                    <Link to={`/profile/${item.USER_ID}`} key={item.USER_ID}>
+                                        <div className='searchList_column'>
+                                            <img src={`http://localhost:4000/profileImg/${item.USER_IMAGE}`} alt="프로필 이미지" />
+                                            <div className='searchList_column_row'>
+                                                <span>{item.USER_NICKNAME}</span>
+                                                <span>{item.USER_NAME}</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </Link>
-                            ))}
+                                    </Link>
+                                ))
+                            ) : (
+                                <p>검색 결과가 없습니다.</p>
+                            )}
 
                         </div>
                     ) : (
