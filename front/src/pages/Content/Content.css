@@ -25,7 +25,11 @@
     width: 5%;
 }
 .post_header_img img {
-    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2em;
+    height: 2em;
     border-radius: 50%;
 }
 .post_header_userName {
@@ -112,7 +116,11 @@
     width: 1%;
 }
 .post_comment img {
-    width: 5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2em;
+    height: 2em;
     border-radius: 50%;
 }
 .post_comment_detail {

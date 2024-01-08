@@ -2,6 +2,7 @@ import './Join.css';
 
 import { useRef, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 function Join() {
     //비밀번호 유효성 검사
@@ -72,7 +73,7 @@ function Join() {
         <div className="join">
             <div className='join_main'>
                 <div className='join_main_logo'>
-                    <span>memories</span>
+                    <span><Link to="/">memories</Link></span>
                 </div>
                 <div className='join_main_googlejoin'>
                     <a href="/">

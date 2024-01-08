@@ -7,6 +7,7 @@
 .myPage_posts img {
     object-fit: fill;
     width: 100%;
+    max-height: 24em;
 }
 .myPage_posts button {
     width: 32%;

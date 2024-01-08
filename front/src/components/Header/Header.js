@@ -112,7 +112,9 @@ function Header() {
                         <input onChange={(event) =>
                             setSearchInput(event.target.value)
                         } value={searchInput} type="text" placeholder="검색" />
-                        <i className="fa-solid fa-xmark" onClick={allEraseInput}></i>
+                        {searchInput.trim() !== '' ? (
+                            <i className="fa-solid fa-xmark" onClick={allEraseInput}></i>
+                        ) : null}
                     </div>
                     {searchInput.trim() !== '' ? (
                         <div className='searchList'>

@@ -2,6 +2,7 @@ import './Login.css';
 
 import { useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 function Login() {
 
@@ -55,7 +56,7 @@ function Login() {
         <div className="login">
             <div className='login_main'>
                 <div className='login_main_logo'>
-                    <a href='/'>memories</a>
+                    <span><Link to="/">memories</Link></span>
                 </div>
                 <form className='login_main_input'>
                     <input type="text" name='userId' placeholder='아이디' onChange={(e) => {
