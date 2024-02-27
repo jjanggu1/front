@@ -10,8 +10,8 @@ import axios from "axios";
 interface CommentMoreProps {
   value: {
     commentUserIdData: {
-      userId: string;
-      comId: number;
+      userId: string | null;
+      comId: number | null;
     };
     getCommentData: () => Promise<void>;
   };

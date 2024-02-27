@@ -1,5 +1,5 @@
 import "./CreatePost.css";
-import ImageSlider from "../ImageSlider/ImageSlider.js";
+import ImageSlider from "../ImageSlider/ImageSlider";
 
 import { useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";

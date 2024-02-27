@@ -1,13 +1,12 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
-export default function useOnClickOutside(ref, handler) {
-  let mainPostModalVisible = useSelector(state => state.mainPostModalVisible);
+export default function useOnClickOutside(ref, handler, isVisible) {
   let mainPostMoreVisible = useSelector(state => state.mainPostMoreVisible);
   let mainCommentMoreVisible = useSelector(state => state.mainCommentMoreVisible);
 
   useEffect(() => {
-    if (!mainPostModalVisible || mainPostMoreVisible || mainCommentMoreVisible) {
+    if (!isVisible || mainPostMoreVisible || mainCommentMoreVisible) {
       return
     } else {
       const listener = (e) => {
@@ -22,5 +21,5 @@ export default function useOnClickOutside(ref, handler) {
         document.removeEventListener("mousedown", listener);
       };
     }
-  }, [ref, handler]);
+  }, [ref, handler, isVisible, mainPostMoreVisible, mainCommentMoreVisible]);
 }

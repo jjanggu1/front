@@ -1,20 +1,42 @@
-import './LikedTabs.css';
-import PostModal from '../../components/PostModal/PostModal.js';
+import './PostTabs.css';
+import PostModal from '../PostModal/PostModal';
 import useOnClickOutside from '../../Hooks/useOnClickOutside.js';
 
-import { tooglePostModal } from "../../store/store";
+import { RootState, tooglePostModal } from "../../store/store";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
-function LikedTabs(props) {
-    const BASE_URL = "http://localhost:4000";
+interface PostTabsProps {
+    userId: {
+        userId: string;
+    };
+}
 
-    let mainPostModalVisible = useSelector(state => state.mainPostModalVisible);
+interface PostsData {
+    BRD_ID: number;
+    BRD_WRITER: string;
+    BRD_NICK: string;
+    BRD_IMAGE1: string | null;
+    BRD_IMAGE2: string | null;
+    BRD_IMAGE3: string | null;
+    BRD_IMAGE4: string | null;
+    BRD_IMAGE5: string | null;
+    BRD_CON: string;
+    BRD_HASHTAG: string;
+    BRD_CREATED_AT: string;
+    BRD_COMMENT_OPEN: number;
+    BRD_REPORT: number;
+}
+
+function PostTabs(props: PostTabsProps) {
+    const BASE_URL = "http://localhost:4000";
+    let mainPostModalVisible = useSelector((state: RootState) => state.mainPostModalVisible);
     let dispatch = useDispatch();
 
+    console.log("프롭스",props.userId)
     // 글 모달 Ref
-    const modalRef = useRef();
+    const modalRef = useRef<HTMLDivElement>(null);
 
     useOnClickOutside(modalRef, () => {
         // 모달 외부를 클릭했을 때 실행할 코드
@@ -22,7 +44,7 @@ function LikedTabs(props) {
     }, mainPostModalVisible);
 
     // PostModal 컴포넌트에 전달할 글 ID
-    const [postNum, setPostNum] = useState();
+    const [postNum, setPostNum] = useState<number>(0);
 
     // 유저 아이디
     const userId = {
@@ -30,12 +52,12 @@ function LikedTabs(props) {
       };
 
     // 게시글 목록 데이터
-    const [postsData, setPostsData] = useState();
+    const [postsData, setPostsData] = useState<PostsData[]>([]);
 
     // 게시글 목록 요청 함수
-    const fetchLikedData = async () => {
+    const fetchPostData = async () => {
         try {
-            const res = await axios.post(`${BASE_URL}/api/mypage/getLikedData`, userId); //게시글 목록 요청
+            const res = await axios.post(`${BASE_URL}/api/mypage/getPostsData`, userId); //게시글 목록 요청
             const data = res.data;
             await setPostsData(data);
 
@@ -69,14 +91,14 @@ function LikedTabs(props) {
     }
 
     useEffect(() => {
-        fetchLikedData();
+        fetchPostData();
     }, [userId.userId]);
 
     console.log("유저 아이디 : ", userId);
     console.log("게시글 데이터 : ", postsData);
     return (
-        <div className='likedTabs'>
-            <div className='myPage_liked'>
+        <div className='postTabs'>
+            <div className='myPage_posts'>
                 {postsData && postsData.map((item) => (
                     <button onClick={() => {
                         dispatch(tooglePostModal());
@@ -86,9 +108,9 @@ function LikedTabs(props) {
                     </button>
                 ))}
             </div>
-            {mainPostModalVisible && <PostModal postNum={postNum} rerenderLikedSaved={fetchLikedSaved} rerenderPostData={fetchLikedData} ref={modalRef} />}
+            {mainPostModalVisible && <PostModal postNum={postNum} rerenderLikedSaved={fetchLikedSaved} rerenderPostData={fetchPostData} ref={modalRef} />}
         </div>
     )
 }
 
-export default LikedTabs;
+export default PostTabs;

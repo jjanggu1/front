@@ -1,9 +1,9 @@
 import './Content.css';
 
 import PostMore from '../../components/PostMore/PostMore.js';
-import PostModal from '../../components/PostModal/PostModal.js';
-import CommentMore from '../../components/CommentMore/CommentMore.js';
-import ImageSlider from '../../components/ImageSlider/ImageSlider.js';
+import PostModal from '../../components/PostModal/PostModal.tsx';
+import CommentMore from '../../components/CommentMore/CommentMore.tsx';
+import ImageSlider from '../../components/ImageSlider/ImageSlider.tsx';
 import useOnClickOutside from '../../Hooks/useOnClickOutside.js';
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect, useRef } from 'react';

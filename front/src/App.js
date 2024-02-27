@@ -7,8 +7,8 @@ import Profile from './components/Profile/Profile.js';
 import UserUpdate from './pages/UserUpdate/UserUpdate.js';
 
 // Components
-import Follower from './components/Follower/Follower.js';
-import PostModal from './components/PostModal/PostModal.js';
+import Follower from './components/Follower/Follower.tsx';
+import PostModal from './components/PostModal/PostModal.tsx';
 // import PostTabs from './components/MyPageTabs/PostTabs.js';
 // import SavedTabs from './components/MyPageTabs/SavedTabs.js';
 // import LikedTabs from './components/MyPageTabs/LikedTabs.js';
