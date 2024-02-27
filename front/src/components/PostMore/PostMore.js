@@ -6,7 +6,6 @@ import { tooglePostMore } from "../../store/store";
 import { tooglePostModal } from "../../store/store";
 import { useEffect, useState } from 'react';
 
-import { PostMoreContext } from '../../context/context';
 import axios from 'axios';
 
 function PostMore(props) {

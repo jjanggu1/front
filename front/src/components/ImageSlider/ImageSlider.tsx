@@ -1,22 +1,28 @@
-import React from 'react';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import './ImageSlider.css';
+import React from "react";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import "./ImageSlider.css";
 
-const ImageSlider = ({ images }) => {
-  const SampleNextArrow = (props) => {
-    const { onClick } = props;
+interface ImageSliderProps {
+  images: (string | null)[];
+}
+interface ArrowProps {
+  onClick?: () => void;
+}
+
+const ImageSlider = ({ images }: ImageSliderProps) => {
+  const filteredImages = images.filter(image => image !== null);
+
+  const SampleNextArrow: React.FC<ArrowProps> = ({ onClick }) => {
     return (
       <div className="custom-arrow next" onClick={onClick}>
-        {/* You can customize the Next Arrow UI here */}
         <i className="fa-solid fa-chevron-right"></i>
       </div>
     );
   };
 
-  const SamplePrevArrow = (props) => {
-    const { onClick } = props;
+  const SamplePrevArrow: React.FC<ArrowProps> = ({ onClick }) => {
     return (
       <div className="custom-arrow prev" onClick={onClick}>
         <i className="fa-solid fa-chevron-left"></i>
@@ -41,7 +47,7 @@ const ImageSlider = ({ images }) => {
           <Slider {...settings}>
             {images.map((image, index) => (
               <div key={index} className="carousel__item">
-                <img src={image} alt={`Image ${index + 1}`} />
+                <img src={image!} alt={`Image ${index + 1}`} />
               </div>
             ))}
           </Slider>

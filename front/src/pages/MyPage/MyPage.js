@@ -1,6 +1,6 @@
 import './MyPage.css';
 
-import Header from '../../components/Header/Header.js';
+import Header from '../../components/Header/Header.tsx';
 import Follower from '../../components/Follower/Follower';
 import Following from '../../components/Following/Following';
 import PostTabs from '../../components/MyPageTabs/PostTabs';

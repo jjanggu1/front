@@ -7,15 +7,24 @@ import axios from 'axios';
 import { toggleCreatePost } from "../../store/store";
 import { Link } from 'react-router-dom';
 
+import { RootState } from '../../store/store';
+
+interface SearchData {
+    USER_ID: string;
+    USER_IMAGE: string;
+    USER_NAME: string;
+    USER_NICKNAME: string;
+}
+
 function Header() {
     const BASE_URL = "http://localhost:4000";
 
-    let isCreatePostVisible = useSelector(state => state.createPostVisible)
+    let isCreatePostVisible = useSelector((state:RootState) => state.createPostVisible)
     let dispatch = useDispatch();
 
 
     const userIdValue = localStorage.getItem("userId");
-    const [isLoggedIn, setIsLoggedIn] = useState();
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
 
     useEffect(() => {
 
@@ -38,7 +47,7 @@ function Header() {
         isLoggedIn === false ? window.location.href = "/login" : dispatch(toggleCreatePost());
     }
 
-    const [previewImage, setPreviewImage] = useState(null);
+    const [previewImage, setPreviewImage] = useState<string>('');
 
     // 프로필 이미지 불러오기
     const getProfileImage = async () => {
@@ -56,7 +65,7 @@ function Header() {
             // Convert array buffer to base64
             const base64Image = btoa(new Uint8Array(res.data).reduce((data, byte) => data + String.fromCharCode(byte), ''));
 
-            const imageUrl = `data:image/png;base64,${base64Image}`;
+            const imageUrl: string = `data:image/png;base64,${base64Image}`;
             setPreviewImage(imageUrl);
 
         } catch (error) {
@@ -67,7 +76,7 @@ function Header() {
     const [searchInput, setSearchInput] = useState("");
 
     // 검색된 데이터 
-    const [searchData, setSearchData] = useState();
+    const [searchData, setSearchData] = useState<SearchData[]>();
 
     // 회원&해시태그 검색
     const fetchSearchData = async () => {

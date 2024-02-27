@@ -1,5 +1,17 @@
 import { configureStore, createSlice  } from '@reduxjs/toolkit'
 
+export interface RootState {
+    isLoggedIn: boolean;
+    followerVisible: boolean;
+    followingVisible: boolean;
+    createPostVisible: boolean;
+    contentsVisible: string; // 또는 "post" | "saved" | "liked" 등 가능한 문자열
+    updateUserTabsVisible: string; // 또는 "profile" | "security" 등 가능한 문자열
+    mainPostMoreVisible: boolean;
+    mainPostModalVisible: boolean;
+    mainCommentMoreVisible: boolean;
+}
+
 //로그인여부
 let isLoggedIn = createSlice({
     name: 'isLoggedIn',

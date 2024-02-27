@@ -1,10 +1,10 @@
 import './Following.css';
 
 import { useSelector, useDispatch } from "react-redux";
-import { toggleFollowing } from "../../store/store";
+import { RootState, toggleFollowing } from "../../store/store";
 
 function Following() {
-    let isfollowingVisible = useSelector(state => state.followingVisible)
+    let isfollowingVisible = useSelector((state: RootState) => state.followingVisible)
     let dispatch = useDispatch();
     return (
         <div className="following_popup">

@@ -1,5 +1,5 @@
 import './UserUpdate.css';
-import Header from '../../components/Header/Header.js';
+import Header from '../../components/Header/Header.tsx';
 import ProfileTabs from '../../components/UserUpdateTabs/ProfileTabs.js';
 import PasswordTabs from '../../components/UserUpdateTabs/PasswordTabs.js';
 
