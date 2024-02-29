@@ -1,5 +1,5 @@
-import Header from '../../components/Header/Header.tsx';
-import Content from '../Content/Content.js';
+import Header from '../../components/Header/Header';
+import Content from '../Content/Content';
 
 function Home() {
     return (

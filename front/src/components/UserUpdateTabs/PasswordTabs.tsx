@@ -17,7 +17,7 @@ function PasswordTabs() {
 
     const { password, passwordCheck } = passwordInput;
 
-    const onChangePasswordInput = (e) => {
+    const onChangePasswordInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { value, name } = e.target
         setPasswordInput({
             ...passwordInput,

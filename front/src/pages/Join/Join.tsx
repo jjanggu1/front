@@ -1,6 +1,6 @@
 import './Join.css';
 
-import { useRef, useState } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
@@ -9,17 +9,17 @@ function Join() {
     const [matchPassword, setMatchPassword] = useState(false);
     const [isPasswordCheck, setIsPasswordCheck] = useState(false);
 
-    let passwordRef = useRef(""); //비밀번호
-    let passwordCheckRef = useRef(""); //비밀번호 확인
+    let passwordRef = useRef<HTMLInputElement>(null); //비밀번호
+    let passwordCheckRef = useRef<HTMLInputElement>(null); //비밀번호 확인
 
     // 비밀번호 확인 값이 존재하는지 체크
     const hasValuePasswordCheck = () => {
-        passwordCheckRef.current.value ? setIsPasswordCheck(true) : setIsPasswordCheck(false);
+        passwordCheckRef.current?.value ? setIsPasswordCheck(true) : setIsPasswordCheck(false);
     }
     // 비밀번호와 비밀번호확인 값이 일치하는지 체크
     const okPasswordCheck = () => {
-        let pw = passwordRef.current.value;
-        let pwCheck = passwordCheckRef.current.value;
+        let pw = passwordRef.current?.value;
+        let pwCheck = passwordCheckRef.current?.value;
         if (pw && pwCheck) {
             pw === pwCheck ? setMatchPassword(true) : setMatchPassword(false);
         } else {
@@ -42,7 +42,7 @@ function Join() {
     });
     const { id, password, passwordCheck, email, name, nick, phone } = userData;
 
-    const handleChange = (e) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { value, name } = e.target;
 
         setuserData({

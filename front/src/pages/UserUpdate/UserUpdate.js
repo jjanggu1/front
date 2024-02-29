@@ -1,7 +1,7 @@
 import './UserUpdate.css';
 import Header from '../../components/Header/Header.tsx';
-import ProfileTabs from '../../components/UserUpdateTabs/ProfileTabs.js';
-import PasswordTabs from '../../components/UserUpdateTabs/PasswordTabs.js';
+import ProfileTabs from '../../components/UserUpdateTabs/ProfileTabs.tsx';
+import PasswordTabs from '../../components/UserUpdateTabs/PasswordTabs.tsx';
 
 import { useSelector, useDispatch } from "react-redux";
 // 리덕스툴킷 수정함수 임포트

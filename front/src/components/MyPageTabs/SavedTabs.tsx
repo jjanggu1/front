@@ -1,7 +1,7 @@
 import './SavedTabs.css';
 
 import PostModal from '../PostModal/PostModal';
-import useOnClickOutside from '../../Hooks/useOnClickOutside.js';
+import useOnClickOutside from '../../Hooks/useOnClickOutside';
 
 import { RootState, tooglePostModal } from "../../store/store";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,7 +10,7 @@ import axios from 'axios';
 
 interface SavedTabsProps {
     userId: {
-        userId: string;
+        userId: string | null;
     };
 }
 

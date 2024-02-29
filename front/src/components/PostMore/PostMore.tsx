@@ -8,7 +8,18 @@ import { useEffect, useState } from 'react';
 
 import axios from 'axios';
 
-function PostMore(props) {
+interface PostMoreProps {
+    value: {
+        postUserIdData: {
+            userId: string | null;
+            brdId: number | null;
+        };
+        getPostData?: () => Promise<void>;
+    };
+    rerenderPostList?: () => void;
+}
+
+function PostMore(props: PostMoreProps) {
     const { postUserIdData, getPostData } = props.value;
 
     const BASE_URL = "http://localhost:4000";
@@ -58,7 +69,7 @@ function PostMore(props) {
             dispatch(tooglePostModal());
 
             // 게시글 목록 리렌더링
-            props.rerenderPostList();
+            props.rerenderPostList && props.rerenderPostList();
         } catch (e) {
             console.error(e);
         }
@@ -82,7 +93,7 @@ function PostMore(props) {
             dispatch(tooglePostModal());
 
             // 게시글 목록 리렌더링
-            props.rerenderPostList();
+            props.rerenderPostList && props.rerenderPostList();
         } catch (e) {
             console.error(e);
         }

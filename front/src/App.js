@@ -1,9 +1,9 @@
 // Pages
-import Home from './pages/Home/Home.js';
-import Login from './pages/Login/Login.js';
-import Join from './pages/Join/Join.js';
-import MyPage from './pages/MyPage/MyPage.js';
-import Profile from './components/Profile/Profile.js';
+import Home from './pages/Home/Home.tsx';
+import Login from './pages/Login/Login.tsx';
+import Join from './pages/Join/Join.tsx';
+import MyPage from './pages/MyPage/MyPage.tsx';
+import Profile from './components/Profile/Profile.tsx';
 import UserUpdate from './pages/UserUpdate/UserUpdate.js';
 
 // Components

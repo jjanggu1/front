@@ -1,6 +1,6 @@
 import './Login.css';
 
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
@@ -12,7 +12,7 @@ function Login() {
         password: ""
     });
 
-    const handleChange = (e) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { value, name } = e.target;
 
         setLoginAccount({
@@ -36,7 +36,7 @@ function Login() {
                 window.location.href = "/";
             }
 
-        } catch (error) {
+        } catch (error: any) {
             if (error.response.status === 401) {
                 alert("로그인에 실패하였습니다.");
             } else {
@@ -45,7 +45,7 @@ function Login() {
         }
     }
 
-    const handleEnterKeyPress = (e) => {
+    const handleEnterKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             e.preventDefault();
             loginForm();

@@ -1,7 +1,7 @@
-import { useEffect, useState, forwardRef, useRef } from "react";
+import { useEffect, useState, forwardRef, useRef, Ref } from "react";
 import "./PostModal.css";
 import ImageSlider from "../ImageSlider/ImageSlider";
-import PostMore from "../PostMore/PostMore.js";
+import PostMore from "../PostMore/PostMore";
 import CommentMore from "../CommentMore/CommentMore";
 import axios from "axios";
 
@@ -11,7 +11,7 @@ import { toogleCommentMore } from "../../store/store";
 import { useDispatch, useSelector } from "react-redux";
 
 interface PostModalProps {
-  postNum: number;
+  postNum: number | null;
   rerenderLikedSaved: () => Promise<void>;
   rerenderPostData: () => Promise<void>;
 }
@@ -215,7 +215,7 @@ const PostModal = forwardRef<HTMLDivElement, PostModalProps>(
     };
 
     // 좋아요 토글 함수
-    const handleToggleLike = async (brdId: number) => {
+    const handleToggleLike = async (brdId: number | null) => {
       // 좋아요를 눌렀는지 확인
       const isLiked = userLikedSaved.some(
         (element) => element.LIKED_NUM === brdId
@@ -237,7 +237,7 @@ const PostModal = forwardRef<HTMLDivElement, PostModalProps>(
     };
 
     // 회원의 좋아요 추가 요청
-    const fetchAddLike = async (brdId: number) => {
+    const fetchAddLike = async (brdId: number | null) => {
       try {
         const addLikeData = {
           userId: userId,
@@ -260,7 +260,7 @@ const PostModal = forwardRef<HTMLDivElement, PostModalProps>(
     };
 
     // 회원의 좋아요 삭제 요청
-    const fetchRemoveLike = async (brdId: number) => {
+    const fetchRemoveLike = async (brdId: number | null) => {
       try {
         const removeLikeData = {
           userId: userId,
@@ -283,7 +283,7 @@ const PostModal = forwardRef<HTMLDivElement, PostModalProps>(
     };
 
     // 저장글 토글 함수
-    const handleToggleSave = async (brdId: number) => {
+    const handleToggleSave = async (brdId: number | null) => {
       // 글을 저장했는지 확인
       const isSaved = userLikedSaved.some(
         (element) => element.SAVED_NUM === brdId
@@ -301,7 +301,7 @@ const PostModal = forwardRef<HTMLDivElement, PostModalProps>(
     };
 
     // 회원의 저장글 추가 요청
-    const fetchAddSave = async (brdId: number) => {
+    const fetchAddSave = async (brdId: number | null) => {
       try {
         const addSaveData = {
           userId: userId,
@@ -324,7 +324,7 @@ const PostModal = forwardRef<HTMLDivElement, PostModalProps>(
     };
 
     // 회원의 저장글 삭제 요청
-    const fetchRemoveSave = async (brdId: number) => {
+    const fetchRemoveSave = async (brdId: number | null) => {
       try {
         const removeSaveData = {
           userId: userId,
@@ -348,7 +348,7 @@ const PostModal = forwardRef<HTMLDivElement, PostModalProps>(
 
     // 이미지 경로 동적생성
     const generateImagePaths = (
-      brdId: number,
+      brdId: number | null,
       ...imageNames: (string | null)[]
     ) => {
       return imageNames
