@@ -11,9 +11,9 @@ import { toogleCommentMore } from "../../store/store";
 import { useDispatch, useSelector } from "react-redux";
 
 interface PostModalProps {
-  postNum: number | null;
-  rerenderLikedSaved: () => Promise<void>;
-  rerenderPostData: () => Promise<void>;
+  postNum?: number | null;
+  rerenderLikedSaved?: () => Promise<void>;
+  rerenderPostData?: () => Promise<void>;
 }
 interface CommentUserIdData {
   userId: string | null;
@@ -72,7 +72,7 @@ const PostModal = forwardRef<HTMLDivElement, PostModalProps>(
 
     //PostMore 컴포넌트로 전달할 함수
     const rerenderPostList = () => {
-      rerenderPostData();
+      rerenderPostData?.();
     };
     // 댓글 입력 Ref
     const commentInputRef = useRef<HTMLInputElement>(null);
@@ -89,19 +89,19 @@ const PostModal = forwardRef<HTMLDivElement, PostModalProps>(
 
     // props로 받은 게시물 Id 저장
     const [brdId, setBrdId] = useState({
-      brdId: postNum,
+      brdId: postNum ?? null,
     });
 
     // PostMore 컴포넌트에 전달할 ConText
     const [postUserIdData, setPostUserIdData] = useState({
       userId: userId, //해당 글의 USER_ID
-      brdId: postNum, //해당 글의 BRD_ID
+      brdId: postNum ?? null, //해당 글의 BRD_ID
     });
     // PostMore 컴포넌트에 전달할 데이터 가져오는 함수
     const getPostUserIdData = () => {
       setPostUserIdData({
         userId: userId,
-        brdId: postNum,
+        brdId: postNum ?? null,
       });
     };
 
@@ -233,7 +233,7 @@ const PostModal = forwardRef<HTMLDivElement, PostModalProps>(
       // 게시글 목록 리렌더링(좋아요수 변경을 위함)
       fetchPostData();
       // 상위 컴포넌트의 좋아요버튼 리렌더링
-      rerenderLikedSaved();
+      rerenderLikedSaved?.();
     };
 
     // 회원의 좋아요 추가 요청
@@ -297,7 +297,7 @@ const PostModal = forwardRef<HTMLDivElement, PostModalProps>(
       }
       fetchLikedSaved();
       // 상위 컴포넌트의 좋아요버튼 리렌더링
-      rerenderLikedSaved();
+      rerenderLikedSaved?.();
     };
 
     // 회원의 저장글 추가 요청

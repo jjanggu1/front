@@ -1,14 +1,14 @@
 import './UserUpdate.css';
-import Header from '../../components/Header/Header.tsx';
-import ProfileTabs from '../../components/UserUpdateTabs/ProfileTabs.tsx';
-import PasswordTabs from '../../components/UserUpdateTabs/PasswordTabs.tsx';
+import Header from '../../components/Header/Header';
+import ProfileTabs from '../../components/UserUpdateTabs/ProfileTabs';
+import PasswordTabs from '../../components/UserUpdateTabs/PasswordTabs';
 
 import { useSelector, useDispatch } from "react-redux";
 // 리덕스툴킷 수정함수 임포트
-import { chooseUpdateUserTabs } from "../../store/store";
+import { RootState, chooseUpdateUserTabs } from "../../store/store";
 
 function UserUpdate() {
-    let updateUserTabsVisible = useSelector(state => state.updateUserTabsVisible)
+    let updateUserTabsVisible = useSelector((state: RootState) => state.updateUserTabsVisible)
     let dispatch = useDispatch();
     return (
         <div className='userUpdate_wrap'>

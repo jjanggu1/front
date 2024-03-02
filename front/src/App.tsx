@@ -1,14 +1,14 @@
 // Pages
-import Home from './pages/Home/Home.tsx';
-import Login from './pages/Login/Login.tsx';
-import Join from './pages/Join/Join.tsx';
-import MyPage from './pages/MyPage/MyPage.tsx';
-import Profile from './components/Profile/Profile.tsx';
-import UserUpdate from './pages/UserUpdate/UserUpdate.js';
+import Home from './pages/Home/Home';
+import Login from './pages/Login/Login';
+import Join from './pages/Join/Join';
+import MyPage from './pages/MyPage/MyPage';
+import Profile from './components/Profile/Profile';
+import UserUpdate from './pages/UserUpdate/UserUpdate';
 
 // Components
-import Follower from './components/Follower/Follower.tsx';
-import PostModal from './components/PostModal/PostModal.tsx';
+import Follower from './components/Follower/Follower';
+import PostModal from './components/PostModal/PostModal';
 // import PostTabs from './components/MyPageTabs/PostTabs.js';
 // import SavedTabs from './components/MyPageTabs/SavedTabs.js';
 // import LikedTabs from './components/MyPageTabs/LikedTabs.js';
