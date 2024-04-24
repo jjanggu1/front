@@ -564,7 +564,7 @@ function Content() {
                           (comment: CommentData) =>
                             comment.COM_REPORT === 0 && (
                               <div
-                                className="post_conten  t_info_comment"
+                                className="post_content_info_comment"
                                 key={comment.COM_ID}
                               >
                                 <span>
