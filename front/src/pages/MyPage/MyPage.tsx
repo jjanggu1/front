@@ -100,14 +100,14 @@ function MyPage() {
           <div className="myPage_header_userImg">
             <img
               src={`http://localhost:4000/profileImg/${
-                userData && userData[0].USER_IMAGE
+                userData[0]?.USER_IMAGE
               }`}
               alt="프로필이미지"
             />
           </div>
           <div className="myPage_header_user">
             <div className="myPage_header_user_info">
-              <span>{userData && userData[0].USER_NICKNAME}</span>
+              <span>{userData[0]?.USER_NICKNAME}</span>
               <a href="/userupdate">
                 프로필 편집
                 <i className="fa-solid fa-gear"></i>
@@ -117,7 +117,7 @@ function MyPage() {
               <span>
                 게시물{" "}
                 <strong>
-                  {userPostCountData && userPostCountData[0].totalPostCount}
+                  {userPostCountData[0]?.totalPostCount}
                 </strong>
               </span>
               <span
@@ -136,10 +136,10 @@ function MyPage() {
               </span>
             </div>
             <div className="myPage_header_user_name">
-              <span>{userData && userData[0].USER_NAME}</span>
+              <span>{userData[0]?.USER_NAME}</span>
             </div>
             <div className="myPage_header_user_introduction">
-              <span>{userData && userData[0].USER_INTRO}</span>
+              <span>{userData[0]?.USER_INTRO}</span>
             </div>
           </div>
         </div>
