@@ -28,7 +28,7 @@ a {
 }
 
 /* 검색창 */
-.header_content .search {
+.header_content .searchBar {
     margin-right: 20%;
 }
 
@@ -98,7 +98,7 @@ a {
     text-align: center;
 }
 
-.header_content .search input {
+.header_content .searchBar input {
     background-color: #f6f6f6;
     border: 1px solid #d0d0d0;
     border-radius: 4px;
