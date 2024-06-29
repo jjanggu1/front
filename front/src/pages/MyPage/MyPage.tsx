@@ -3,9 +3,7 @@ import "./MyPage.css";
 import Header from "../../components/Header/Header";
 import Follower from "../../components/Follower/Follower";
 import Following from "../../components/Following/Following";
-import PostTabs from "../../components/MyPageTabs/PostTabs";
-import SavedTabs from "../../components/MyPageTabs/SavedTabs";
-import LikedTabs from "../../components/MyPageTabs/LikedTabs";
+import MyPageTabs from "../../components/MyPageTabs/MyPageTabs";
 
 import { useSelector, useDispatch } from "react-redux";
 // 리덕스툴킷 수정함수 임포트
@@ -146,10 +144,10 @@ function MyPage() {
         <div className="myPage_category">
           <span
             onClick={() => {
-              dispatch(chooseTabs("post"));
+              dispatch(chooseTabs("Posts"));
             }}
             className={`myPage_category_span ${
-              contentsVisible === "post" ? "myPage_category_span_border" : ""
+              contentsVisible === "Posts" ? "myPage_category_span_border" : ""
             }`}
           >
             <i className="fa-solid fa-border-all"></i>
@@ -157,10 +155,10 @@ function MyPage() {
           </span>
           <span
             onClick={() => {
-              dispatch(chooseTabs("saved"));
+              dispatch(chooseTabs("Saved"));
             }}
             className={`myPage_category_span ${
-              contentsVisible === "saved" ? "myPage_category_span_border" : ""
+              contentsVisible === "Saved" ? "myPage_category_span_border" : ""
             }`}
           >
             <i className="fa-regular fa-bookmark"></i>
@@ -168,22 +166,17 @@ function MyPage() {
           </span>
           <span
             onClick={() => {
-              dispatch(chooseTabs("liked"));
+              dispatch(chooseTabs("Liked"));
             }}
             className={`myPage_category_span ${
-              contentsVisible === "liked" ? "myPage_category_span_border" : ""
+              contentsVisible === "Liked" ? "myPage_category_span_border" : ""
             }`}
           >
             <i className="fa-regular fa-heart"></i>
             좋아요
           </span>
         </div>
-        {contentsVisible === "post" && <PostTabs userId={userId} />}{" "}
-        {/* "post" 상태일 때 */}
-        {contentsVisible === "saved" && <SavedTabs userId={userId} />}{" "}
-        {/* "saved" 상태일 때 */}
-        {contentsVisible === "liked" && <LikedTabs userId={userId} />}{" "}
-        {/* "liked" 상태일 때 */}
+        <MyPageTabs userId={userId} />
       </div>
       {isFollowerVisible && <Follower />}
       {isFollowingVisible && <Following />}

@@ -1,4 +1,4 @@
-import './PostTabs.css';
+import './MyPageTabs.css';
 import PostModal from '../PostModal/PostModal';
 import useOnClickOutside from '../../Hooks/useOnClickOutside';
 
@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
-interface PostTabsProps {
+interface MyPageTabsProps {
     userId: {
         userId: string | null;
     };
@@ -29,9 +29,12 @@ interface PostsData {
     BRD_REPORT: number;
 }
 
-function PostTabs(props: PostTabsProps) {
+function MyPageTabs(props: MyPageTabsProps) {
     const BASE_URL = "http://localhost:4000";
     let mainPostModalVisible = useSelector((state: RootState) => state.mainPostModalVisible);
+    let contentsVisible = useSelector(
+        (state: RootState) => state.contentsVisible
+      );
     let dispatch = useDispatch();
 
     console.log("프롭스",props.userId)
@@ -57,7 +60,7 @@ function PostTabs(props: PostTabsProps) {
     // 게시글 목록 요청 함수
     const fetchPostData = async () => {
         try {
-            const res = await axios.post(`${BASE_URL}/api/mypage/getPostsData`, userId); //게시글 목록 요청
+            const res = await axios.post(`${BASE_URL}/api/mypage/get${contentsVisible}Data`, userId); //게시글 목록 요청
             const data = res.data;
             await setPostsData(data);
 
@@ -92,12 +95,12 @@ function PostTabs(props: PostTabsProps) {
 
     useEffect(() => {
         fetchPostData();
-    }, [userId.userId]);
+    }, [userId.userId, contentsVisible]);
 
     console.log("유저 아이디 : ", userId);
     console.log("게시글 데이터 : ", postsData);
     return (
-        <div className='postTabs'>
+        <div className='myPageTabs'>
             <div className='myPage_posts'>
                 {postsData && postsData.map((item) => (
                     <button onClick={() => {
@@ -113,4 +116,4 @@ function PostTabs(props: PostTabsProps) {
     )
 }
 
-export default PostTabs;
+export default MyPageTabs;

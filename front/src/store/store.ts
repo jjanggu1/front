@@ -58,7 +58,7 @@ let createPostVisible = createSlice({
 // 게시물&저장됨%좋아요탭 상태
 let contentsVisible = createSlice({
     name: 'contentsVisible',
-    initialState: "post",
+    initialState: "Posts",
     reducers : {
         chooseTabs(state, action) {
             return action.payload;
