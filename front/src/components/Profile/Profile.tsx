@@ -3,9 +3,7 @@ import "./Profile.css";
 import Header from "../Header/Header";
 import Follower from "../Follower/Follower";
 import Following from "../Following/Following";
-import PostTabs from "../MyPageTabs/PostTabs";
-import SavedTabs from "../MyPageTabs/SavedTabs";
-import LikedTabs from "../MyPageTabs/LikedTabs";
+import MyPageTabs from "../MyPageTabs/MyPageTabs";
 
 import { useSelector, useDispatch } from "react-redux";
 // 리덕스툴킷 수정함수 임포트
@@ -24,10 +22,10 @@ interface UserData {
   USER_NICKNAME: string;
 }
 interface UserPostCountData {
-    totalPostCount: number;
+  totalPostCount: number;
 }
 interface UserId {
-    userId: string;
+  userId: string;
 }
 
 function Profile() {
@@ -68,7 +66,9 @@ function Profile() {
   };
 
   // 회원 데이터
-  const [userPostCountData, setUserPostCountData] = useState<UserPostCountData[]>([]);
+  const [userPostCountData, setUserPostCountData] = useState<
+    UserPostCountData[]
+  >([]);
 
   // 작성한 게시물 수 요청 함수
   const fetchPostCountData = async () => {
@@ -99,6 +99,10 @@ function Profile() {
   // }, []);
   console.log("마이페이지회원 데이터", userData);
   console.log("마이페이지회원 게시글 수 : ", userPostCountData);
+
+  if (userData.length === 0 || userPostCountData.length === 0) {
+    return <div>Loading...</div>;
+  }
   return (
     <div className="profile_wrap">
       <Header />
@@ -106,22 +110,17 @@ function Profile() {
         <div className="profile_header">
           <div className="profile_header_userImg">
             <img
-              src={`http://localhost:4000/profileImg/${
-                userData && userData[0].USER_IMAGE
-              }`}
+              src={`http://localhost:4000/profileImg/${userData[0].USER_IMAGE}`}
               alt="프로필이미지"
             />
           </div>
           <div className="profile_header_user">
             <div className="profile_header_user_info">
-              <span>{userData && userData[0].USER_NICKNAME}</span>
+              <span>{userData[0].USER_NICKNAME}</span>
             </div>
             <div className="profile_header_user_community">
               <span>
-                게시물{" "}
-                <strong>
-                  {userPostCountData && userPostCountData[0].totalPostCount}
-                </strong>
+                게시물 <strong>{userPostCountData[0].totalPostCount}</strong>
               </span>
               <span
                 onClick={() => {
@@ -139,20 +138,20 @@ function Profile() {
               </span>
             </div>
             <div className="profile_header_user_name">
-              <span>{userData && userData[0].USER_NAME}</span>
+              <span>{userData[0].USER_NAME}</span>
             </div>
             <div className="profile_header_user_introduction">
-              <span>{userData && userData[0].USER_INTRO}</span>
+              <span>{userData[0].USER_INTRO}</span>
             </div>
           </div>
         </div>
         <div className="profile_category">
           <span
             onClick={() => {
-              dispatch(chooseTabs("post"));
+              dispatch(chooseTabs("Posts"));
             }}
             className={`profile_category_span ${
-              contentsVisible === "post" ? "profile_category_span_border" : ""
+              contentsVisible === "Posts" ? "profile_category_span_border" : ""
             }`}
           >
             <i className="fa-solid fa-border-all"></i>
@@ -160,10 +159,10 @@ function Profile() {
           </span>
           <span
             onClick={() => {
-              dispatch(chooseTabs("saved"));
+              dispatch(chooseTabs("Saved"));
             }}
             className={`profile_category_span ${
-              contentsVisible === "saved" ? "profile_category_span_border" : ""
+              contentsVisible === "Saved" ? "profile_category_span_border" : ""
             }`}
           >
             <i className="fa-regular fa-bookmark"></i>
@@ -171,22 +170,17 @@ function Profile() {
           </span>
           <span
             onClick={() => {
-              dispatch(chooseTabs("liked"));
+              dispatch(chooseTabs("Liked"));
             }}
             className={`profile_category_span ${
-              contentsVisible === "liked" ? "profile_category_span_border" : ""
+              contentsVisible === "Liked" ? "profile_category_span_border" : ""
             }`}
           >
             <i className="fa-regular fa-heart"></i>
             좋아요
           </span>
         </div>
-        {contentsVisible === "post" && <PostTabs userId={userId} />}{" "}
-        {/* "post" 상태일 때 */}
-        {contentsVisible === "saved" && <SavedTabs userId={userId} />}{" "}
-        {/* "saved" 상태일 때 */}
-        {contentsVisible === "liked" && <LikedTabs userId={userId} />}{" "}
-        {/* "liked" 상태일 때 */}
+        <MyPageTabs userId={userId} />
       </div>
       {isFollowerVisible && <Follower />}
       {isFollowingVisible && <Following />}
