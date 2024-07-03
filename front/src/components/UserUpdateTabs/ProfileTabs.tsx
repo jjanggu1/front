@@ -2,7 +2,7 @@ import "./ProfileTabs.css";
 
 import { useRef, useState, useEffect, ChangeEvent } from "react";
 import axios from "axios";
-
+import useInputs from "../../Hooks/useInputs";
 
 function ProfileTabs() {
   const BASE_URL = "http://localhost:4000";
@@ -10,15 +10,11 @@ function ProfileTabs() {
   const [userId, setUserId] = useState<string | null>(null);
   // 로컬스토리지에서 userId값 받아옴
   const getLocalStorageId = () => {
-    const storedUserId = localStorage.getItem("userId");
+    const storedUserId = localStorage.getItem("userId") || "";
     if (storedUserId) {
       setUserId(storedUserId);
       console.log("userId 상태 저장 성공");
     }
-    setUserInfoInput((prevState) => ({
-      ...prevState,
-      userId: storedUserId,
-    }));
   };
   // 서버로부터 프로필 이미지 받아옴
   const getProfileImage = async () => {
@@ -88,32 +84,27 @@ function ProfileTabs() {
   };
 
   // 유저정보 수정 로직
-  const [userInfoInput, setUserInfoInput] = useState({
+  const [form, onChangeInput, reset] = useInputs({
     name: "",
     username: "",
     email: "",
     phonenum: "",
     intro: "",
-    userId: userId,
+    userId: "", // userId가 null일 경우 빈 문자열로 대체
   });
 
-  const { name, username, email, phonenum, intro } = userInfoInput;
-
-  const onChangeUserInfoInput = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { value, name } = e.target;
-    setUserInfoInput({
-      ...userInfoInput,
-      [name]: value,
-    });
-    console.log(userInfoInput);
-  };
-
+  useEffect(() => {
+    if (userId) {
+      onChangeInput({ target: { name: 'userId', value: userId } });
+    }
+  }, [userId, onChangeInput]);
+  
   // 유저정보 수정을 서버로 요청
   const fetchUpdateUserInfo = async () => {
     try {
       const res = await axios.post(
         `${BASE_URL}/api/updateProfile`,
-        userInfoInput
+        form
       );
       alert(res.data.message);
     } catch (error) {
@@ -127,7 +118,7 @@ function ProfileTabs() {
       if (selectedFile) {
         const formData = new FormData();
         formData.append("profileImage", selectedFile);
-        formData.append("userId", userId ?? ''); // userId가 null이면 빈 문자열로 전달
+        formData.append("userId", userId ?? ""); // userId가 null이면 빈 문자열로 전달
         console.log(formData);
         // 서버로 이미지 업로드
         const res = await axios.post(`${BASE_URL}/api/profileImg`, formData, {
@@ -150,7 +141,14 @@ function ProfileTabs() {
         <div className="userUpdate_main_imgUpdate_img">
           {/* 업로드 된 이미지 미리보기 */}
           {previewImage ? (
-            <img src={typeof previewImage === 'string' ? previewImage : URL.createObjectURL(new Blob([previewImage]))} alt="프로필 이미지 미리보기" />
+            <img
+              src={
+                typeof previewImage === "string"
+                  ? previewImage
+                  : URL.createObjectURL(new Blob([previewImage]))
+              }
+              alt="프로필 이미지 미리보기"
+            />
           ) : (
             <img src={require(`../../assets/img/user.png`)} alt="기본 이미지" />
           )}
@@ -178,9 +176,9 @@ function ProfileTabs() {
         </div>
         <div className="userUpdate_main_infoUpdate_input">
           <input
-            onChange={onChangeUserInfoInput}
+            onChange={onChangeInput}
             name="name"
-            value={name}
+            value={form.name}
             type="text"
             id="name"
             placeholder="이름"
@@ -192,9 +190,9 @@ function ProfileTabs() {
           </p>
 
           <input
-            onChange={onChangeUserInfoInput}
+            onChange={onChangeInput}
             name="username"
-            value={username}
+            value={form.username}
             type="text"
             id="username"
             placeholder="사용자 이름"
@@ -211,9 +209,9 @@ function ProfileTabs() {
             입력하세요. 공개 프로필에는 포함되지 않습니다.
           </p>
           <input
-            onChange={onChangeUserInfoInput}
+            onChange={onChangeInput}
             name="email"
-            value={email}
+            value={form.email}
             type="text"
             id="email"
             placeholder="이메일"
@@ -221,9 +219,9 @@ function ProfileTabs() {
           />
 
           <input
-            onChange={onChangeUserInfoInput}
+            onChange={onChangeInput}
             name="phonenum"
-            value={phonenum}
+            value={form.phonenum}
             type="text"
             id="phonenum"
             placeholder="전화번호"
@@ -231,9 +229,9 @@ function ProfileTabs() {
           />
 
           <textarea
-            onChange={onChangeUserInfoInput}
+            onChange={onChangeInput}
             name="intro"
-            value={intro}
+            value={form.intro}
             id="intro"
             placeholder="소개"
             maxLength={100}

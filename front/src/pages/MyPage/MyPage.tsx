@@ -12,6 +12,7 @@ import { toggleFollowing } from "../../store/store";
 import { chooseTabs } from "../../store/store";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 interface UserData {
   USER_ID: string;
@@ -106,10 +107,10 @@ function MyPage() {
           <div className="myPage_header_user">
             <div className="myPage_header_user_info">
               <span>{userData[0]?.USER_NICKNAME}</span>
-              <a href="/userupdate">
+              <Link to="/userupdate">
                 프로필 편집
                 <i className="fa-solid fa-gear"></i>
-              </a>
+              </Link>
             </div>
             <div className="myPage_header_user_community">
               <span>
