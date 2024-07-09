@@ -9,11 +9,39 @@ const updateProfileCtrl = {
 
             const connection = await connectToDatabase();
 
-            const [results] = await connection.query(`
-            UPDATE user
-            SET USER_NAME = ?, USER_NICKNAME = ?, USER_EMAIL = ?, USER_PHONE = ?, USER_INTRO = ?
-            WHERE USER_ID = ?;
-            `, [ name, username, email, phonenum, intro, userId]);
+            let updateFields = [];
+            let updateValues = [];
+
+            if (name !== '' && name !== null) {
+                updateFields.push('USER_NAME = ?');
+                updateValues.push(name);
+            }
+            if (username !== '' && username !== null) {
+                updateFields.push('USER_NICKNAME = ?');
+                updateValues.push(username);
+            }
+            if (email !== '' && email !== null) {
+                updateFields.push('USER_EMAIL = ?');
+                updateValues.push(email);
+            }
+            if (phonenum !== '' && phonenum !== null) {
+                updateFields.push('USER_PHONE = ?');
+                updateValues.push(phonenum);
+            }
+            if (intro !== '' && intro !== null) {
+                updateFields.push('USER_INTRO = ?');
+                updateValues.push(intro);
+            }
+
+            updateValues.push(userId);
+
+            const query = `
+        UPDATE user
+        SET ${updateFields.join(', ')}
+        WHERE USER_ID = ?;
+        `;
+
+            const [results] = await connection.query(query, updateValues);
 
             console.log('프로필이 성공적으로 수정되었습니다.', results);
             res.json({ success: true, message: '프로필이 수정되었습니다.' });
@@ -38,7 +66,7 @@ const updateProfileCtrl = {
             UPDATE user
             SET USER_PW = ?
             WHERE USER_ID = ?;
-            `, [ bcryptPassword, userId]);
+            `, [bcryptPassword, userId]);
 
             console.log('비밀번호가 성공적으로 수정되었습니다.', results);
             res.json({ success: true, message: '비밀번호가 수정되었습니다.' });
