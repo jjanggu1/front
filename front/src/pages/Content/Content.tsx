@@ -7,12 +7,13 @@ import useOnClickOutside from "../../Hooks/useOnClickOutside";
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect, useRef, ChangeEvent } from "react";
 import axios from "axios";
+import PostHeader from "./PostHeader";
+import PostContent from "./PostContent";
+import PostComment from "./PostComment";
 
 // 리덕스툴킷 수정함수 임포트
 import { RootState } from "../../store/store";
 import { tooglePostModal } from "../../store/store";
-import PostHeader from "./PostHeader";
-import PostContent from "./PostContent";
 
 interface PostsData {
   BRD_ID: number;
@@ -442,50 +443,14 @@ function Content() {
                   handleToggleSave={handleToggleSave}
                   getCommentUserIdData={getCommentUserIdData}
                 />
-                {item.BRD_COMMENT_OPEN === 1 ? (
-                  <div className="post_comment">
-                    {isLoggedIn ? (
-                      <img
-                        src={`http://localhost:4000/profileImg/${item.USER_IMAGE}`}
-                        alt="프로필 이미지"
-                      />
-                    ) : (
-                      <i className="fa-regular fa-circle-user fa-2x"></i>
-                    )}
-                    <div className="post_comment_detail">
-                      <input
-                        value={commentInfo.comment}
-                        onChange={(event) => {
-                          inputCommentChange(event);
-                          getBrdId(item.BRD_ID);
-                        }}
-                        type="text"
-                        placeholder="댓글 달기..."
-                      />
-                    </div>
-                    <button
-                      onClick={() => {
-                        fetchAddComment();
-                      }}
-                    >
-                      게시
-                    </button>
-                  </div>
-                ) : (
-                  <div className="post_comment">
-                    {isLoggedIn ? (
-                      <img
-                        src={`http://localhost:4000/profileImg/${item.USER_IMAGE}`}
-                        alt="프로필 이미지"
-                      />
-                    ) : (
-                      <i className="fa-regular fa-circle-user fa-2x"></i>
-                    )}
-                    <div className="post_comment_detail">
-                      <span>작성자가 댓글을 제한한 글입니다.</span>
-                    </div>
-                  </div>
-                )}
+                <PostComment
+                  postData={item}
+                  isLoggedIn={isLoggedIn}
+                  commentInfo={commentInfo}
+                  inputCommentChange={inputCommentChange}
+                  getBrdId={getBrdId}
+                  fetchAddComment={fetchAddComment}
+                />
               </div>
             )
           )}
