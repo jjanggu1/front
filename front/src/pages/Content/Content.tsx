@@ -3,7 +3,6 @@ import "./Content.css";
 import PostMore from "../../components/PostMore/PostMore";
 import PostModal from "../../components/PostModal/PostModal";
 import CommentMore from "../../components/CommentMore/CommentMore";
-import ImageSlider from "../../components/ImageSlider/ImageSlider";
 import useOnClickOutside from "../../Hooks/useOnClickOutside";
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect, useRef, ChangeEvent } from "react";
@@ -12,8 +11,8 @@ import axios from "axios";
 // 리덕스툴킷 수정함수 임포트
 import { RootState } from "../../store/store";
 import { tooglePostModal } from "../../store/store";
-import { toogleCommentMore } from "../../store/store";
 import PostHeader from "./PostHeader";
+import PostContent from "./PostContent";
 
 interface PostsData {
   BRD_ID: number;
@@ -69,7 +68,7 @@ interface CommentData {
 }
 // BRD_ID를 키로 사용하여 댓글을 관리하는 데이터 구조의 타입 정의
 interface CommentsData {
-    [BRD_ID: number]: CommentData[];
+  [BRD_ID: number]: CommentData[];
 }
 function Content() {
   const BASE_URL = "http://localhost:4000";
@@ -212,39 +211,6 @@ function Content() {
       .map(
         (imageName) => `http://localhost:4000/postImg/${brdId}/${imageName}`
       );
-  };
-
-  // 게시글 얼마 전에 작성됐는지 구하는 로직
-  const getTimeAgo = (post: PostsData) => {
-    const today = new Date();
-    const createdDay = new Date(post.BRD_CREATED_AT);
-    let milliseconds = 0;
-    if (createdDay) {
-      milliseconds = today.getTime() - createdDay.getTime();
-    } else {
-      console.log("postsData가 정의되지 않았거나 비어 있습니다.");
-    }
-
-    const seconds = Math.floor(milliseconds / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-    const months = Math.floor(days / 30);
-    const years = Math.floor(months / 12);
-
-    if (years > 0) {
-      return `${years}년 전`;
-    } else if (months > 0) {
-      return `${months}달 전`;
-    } else if (days > 0) {
-      return `${days}일 전`;
-    } else if (hours > 0) {
-      return `${hours}시간 전`;
-    } else if (minutes > 0) {
-      return `${minutes}분 전`;
-    } else {
-      return "방금 전";
-    }
   };
 
   //댓글 작성 로직
@@ -463,112 +429,19 @@ function Content() {
           postsData.map((item) =>
             item.BRD_REPORT === 1 ? null : (
               <div className="post" key={item.BRD_ID}>
-                <PostHeader postData={item} getPostUserIdData={getPostUserIdData} />
-                <div className="post_content">
-                  <div className="post_content_img">
-                    <ImageSlider
-                      images={generateImagePaths(
-                        item.BRD_ID,
-                        item.BRD_IMAGE1,
-                        item.BRD_IMAGE2,
-                        item.BRD_IMAGE3,
-                        item.BRD_IMAGE4,
-                        item.BRD_IMAGE5
-                      )}
-                    />
-                  </div>
-                  <div className="post_content_info">
-                    <div className="post_content_info_btns">
-                      {userLikedSaved &&
-                      userLikedSaved.length > 0 &&
-                      userLikedSaved.some(
-                        (element) => element.LIKED_NUM === item.BRD_ID
-                      ) ? (
-                        <i
-                          className="fa-solid fa-heart heart-style"
-                          onClick={() => handleToggleLike(item.BRD_ID)}
-                        ></i>
-                      ) : (
-                        <i
-                          className="fa-regular fa-heart"
-                          onClick={() => handleToggleLike(item.BRD_ID)}
-                        ></i>
-                      )}
-                      {item.BRD_COMMENT_OPEN === 1 ? (
-                        <i
-                          className="fa-regular fa-comment"
-                          onClick={() => {
-                            dispatch(tooglePostModal());
-                            setPostNum(item.BRD_ID);
-                          }}
-                        ></i>
-                      ) : null}
-                      {userLikedSaved &&
-                      userLikedSaved.length > 0 &&
-                      userLikedSaved.some(
-                        (element) => element.SAVED_NUM === item.BRD_ID
-                      ) ? (
-                        <i
-                          className="fa-solid fa-bookmark"
-                          onClick={() => handleToggleSave(item.BRD_ID)}
-                        ></i>
-                      ) : (
-                        <i
-                          className="fa-regular fa-bookmark"
-                          onClick={() => handleToggleSave(item.BRD_ID)}
-                        ></i>
-                      )}
-                    </div>
-                    <div className="post_content_info_firstComment">
-                      {item.LIKED_COUNT === 0 ? (
-                        <span>가장 먼저 좋아요를 눌러주세요</span>
-                      ) : (
-                        <span>
-                          <strong>좋아요 {item.LIKED_COUNT}개</strong>
-                        </span>
-                      )}
-                    </div>
-                    {/* 좋아요 하나도 없으면 : '가장 먼저 좋아요를 눌러주세요'
-                                좋아요 하나라도 있으면 : '좋아요000개' */}
-                    <div className="post_content_info_detail">
-                      <span>
-                        <strong>{item.USER_NICKNAME}</strong>
-                      </span>
-                      <span>{item.BRD_CON}</span>
-                    </div>
-                    <div className="post_content_info_commentList">
-                      {commentsData[item.BRD_ID] &&
-                        commentsData[item.BRD_ID].map(
-                          (comment: CommentData) =>
-                            comment.COM_REPORT === 0 && (
-                              <div
-                                className="post_content_info_comment"
-                                key={comment.COM_ID}
-                              >
-                                <span>
-                                  <strong>{comment.USER_NICKNAME}</strong>
-                                </span>
-                                <span>{comment.COM_COMMENT}</span>
-                                <span
-                                  onClick={() => {
-                                    getCommentUserIdData(
-                                      comment.COM_ID,
-                                      comment.COM_WRITER
-                                    );
-                                    dispatch(toogleCommentMore());
-                                  }}
-                                >
-                                  <i className="fa-solid fa-ellipsis"></i>
-                                </span>
-                              </div>
-                            )
-                        )}
-                    </div>
-                    <div className="post_content_info_time">
-                      <span>{getTimeAgo(item)}</span>
-                    </div>
-                  </div>
-                </div>
+                <PostHeader
+                  postData={item}
+                  getPostUserIdData={getPostUserIdData}
+                />
+                <PostContent
+                  postData={item}
+                  userLikedSaved={userLikedSaved}
+                  commentsData={commentsData}
+                  handleToggleLike={handleToggleLike}
+                  setPostNum={setPostNum}
+                  handleToggleSave={handleToggleSave}
+                  getCommentUserIdData={getCommentUserIdData}
+                />
                 {item.BRD_COMMENT_OPEN === 1 ? (
                   <div className="post_comment">
                     {isLoggedIn ? (
