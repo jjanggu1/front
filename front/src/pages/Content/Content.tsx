@@ -10,9 +10,10 @@ import { useState, useEffect, useRef, ChangeEvent } from "react";
 import axios from "axios";
 
 // 리덕스툴킷 수정함수 임포트
-import { RootState, tooglePostMore } from "../../store/store";
+import { RootState } from "../../store/store";
 import { tooglePostModal } from "../../store/store";
 import { toogleCommentMore } from "../../store/store";
+import PostHeader from "./PostHeader";
 
 interface PostsData {
   BRD_ID: number;
@@ -462,30 +463,7 @@ function Content() {
           postsData.map((item) =>
             item.BRD_REPORT === 1 ? null : (
               <div className="post" key={item.BRD_ID}>
-                <div className="post_header">
-                  <div className="post_header_img">
-                    {item.USER_IMAGE ? (
-                      <img
-                        src={`http://localhost:4000/profileImg/${item.USER_IMAGE}`}
-                        alt="프로필 이미지"
-                      />
-                    ) : (
-                      <i className="fa-regular fa-circle-user fa-2x"></i>
-                    )}
-                  </div>
-                  <div className="post_header_userName">
-                    <span>{item.USER_NICKNAME}</span>
-                  </div>
-                  <div
-                    className="post_header_more"
-                    onClick={() => {
-                      getPostUserIdData(item.BRD_ID, item.USER_ID);
-                      dispatch(tooglePostMore());
-                    }}
-                  >
-                    <i className="fa-solid fa-ellipsis"></i>
-                  </div>
-                </div>
+                <PostHeader postData={item} getPostUserIdData={getPostUserIdData} />
                 <div className="post_content">
                   <div className="post_content_img">
                     <ImageSlider
