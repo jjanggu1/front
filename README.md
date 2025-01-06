@@ -15,7 +15,7 @@ JavaScript로 개발하였으며 TypeScript로 마이그레이션하였습니다
 <br/>
 
 ### ⌚ Project execution period
-2023.10.16 ~
+2023.10.16 ~ 2024.03.02
 
 <br/>
 
